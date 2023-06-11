@@ -1,6 +1,22 @@
-import './assets/main.css'
-
 import { createApp } from 'vue'
-import App from './App.vue'
+import { createRouter, createWebHistory } from 'vue-router'
+import App from '../app.vue'
+import Home from '../views/home.vue'
 
-createApp(App).mount('#app')
+import '@/stylesheets/styles.css';
+
+const routes = [
+    {
+        path: '/',
+        name: 'Home',
+        component: Home
+    },
+    // Add more routes here if needed
+]
+
+const router = createRouter({
+    history: createWebHistory(),
+    routes
+})
+
+createApp(App).use(router).mount('#app')
