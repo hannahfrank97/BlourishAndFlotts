@@ -8,10 +8,22 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "axios": "^1.4.0",
+    "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",
+    "cookie-parser": "^1.4.6",
+    "cor": "^0.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.1.4",
+    "ejs": "^3.1.9",
     "express": "^4.18.2",
-    "vue": "^3.3.2",
-    "vue-router": "^4.2.2"
+    "jsonwebtoken": "^9.0.0",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.3",
+    "mysql": "^2.18.1",
+    "uuid": "^9.0.0",
+    "vue-router": "^4.2.2",
+    "ws": "^8.13.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.2.3",

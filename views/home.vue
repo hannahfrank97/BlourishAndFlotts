@@ -1,18 +1,34 @@
 <template>
-    <div>
-        <h1 class="text-3xl font-bold underline">
-            Hello world!
-        </h1>
-        <TestComponent /> <!-- Make sure TestComponent is used -->
+    <navbar />
+
+    <div class="banner">
+        <div class="content-container">
+            <div class="text-container">
+                <h1 class="h1_banner">Your most inspiring magical magic book experience</h1>
+            </div>
+            <div class="image-container">
+                <img src="../src/images/bannerImage.png" alt="two books" class="banner_image">
+            </div>
+        </div>
+        <div class="button-container">
+            <Button />
+        </div>
     </div>
+
+
+
+
 </template>
 
 <script>
-import TestComponent from '../src/components/testcomponent.vue';
+import Navbar from "../src/components/navbar.vue";
+import Button from "../src/components/button.vue";
 
 export default {
     components: {
-        TestComponent,
+        Button,
+        Navbar,
     },
 };
 </script>
+

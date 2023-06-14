@@ -5,11 +5,28 @@ const port = 3000;
 const path = require('path');
 const db = require('./services/database'); //database
 const websockets = require('./services/websockets'); // chat
+const cors = require('cors');
+
+app.use(cors());
+
+app.use(express.static(path.join(__dirname, 'dist')));
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Set up your routes here
-app.get('/', (req, res) => res.send('Hello World!'));
+app.use('/members', require('./routes/members'));
 
-// Set up your server to listen on a specific port
-app.listen(port, () => console.log(`Server running on port ${3000}`));
+
+// routes
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
+
+
+function errorHandler(err, req, res, next) {
+    res.render('error', { error: err });
+}
+
+app.use(errorHandler);
+
+app.listen(3000, () => console.log(`Server running on port ${3000}`));
