@@ -1,55 +1,36 @@
 const express = require('express');
 const membersController = require("../controllers/membersController");
+const booksController = require("../controllers/booksController");
+const cartController = require("../controllers/cartController");
 const router = express.Router();
 const authenticationService = require('../services/authentication');
 const membersModel = require('../models/membersModel');
+const booksRouter = require('./books');
+const cartRouter = require('./cart');
 
-const membersRouter = require('./members');
-
-router
-    .get('/', (req, res) => {
-        res.render('index');
-    })
-    .post('/', (req, res, next) => {
-        console.log(req.body);
-        res.send('Received a POST request');
-    });
-
-// LOGIN
-
-router.route('/login')
-    .get((req, res, next) => {
-        res.render('login');
-    })
+router.route('/')
     .post((req, res, next) => {
-        userModel.getUsers()
-            .then((users) => {
-                authenticationService.authenticateUser(req.body, users, res)
+        membersModel.getMembers()
+            .then((members) => {
+                return authenticationService.authenticateMember(req.body, members, res)
+            })
+            .then(authenticatedMember => {
+                res.json(authenticatedMember);
             })
             .catch((err) => {
-                res.sendStatus(500)
+                res.status(500).json({ error: err.toString() });
             })
     });
 
 router.get('/logout', (req, res) => {
     res.cookie('accessToken', '', {maxAge: 0});
-    res.cookie('loggedUser', '', {maxAge: 0});
+    res.cookie('loggedMember', '', {maxAge: 0});
     res.redirect('/');
 })
 
-router.get('/register', (req, res) => {
-    res.render('register');
-})
 router.post('/register', membersController.registerMember);
 
-
-router.get('/philosophy', (req, res) => {
-    res.render('philosophy');
-})
-
-router.get('/pasta', (req, res) => {
-    res.render('pasta');
-})
+router.use(authenticationService.authenticateJWT);
 
 router.get('/cookies', (req, res, next) => {
 

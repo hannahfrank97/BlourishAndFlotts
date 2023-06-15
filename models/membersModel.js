@@ -44,7 +44,7 @@ let updateMember = (memberData) => new Promise(async (resolve, reject)=>{
 
 
 let addMember = (memberData) => new Promise(async (resolve, reject) => {
-
+console.log('test')
     memberData.password = await bcrypt.hash(memberData.password, 10);
     let sql = "INSERT INTO members (username, email, password) VALUES " +
         "( " +
@@ -64,7 +64,7 @@ let addMember = (memberData) => new Promise(async (resolve, reject) => {
 
 
 let registerMember = (memberData) => new Promise(async (resolve, reject) => {
-
+    console.log('memberData', memberData);
     memberData.password = await bcrypt.hash(memberData.password, 10);
 
     let sql = "INSERT INTO members (username, email, password) VALUES " +
@@ -77,7 +77,15 @@ let registerMember = (memberData) => new Promise(async (resolve, reject) => {
         if(err) {
             reject(err);
         }
-        resolve(memberData);
+        else {
+            const newMember = {
+                id: result.insertId,
+                username: memberData.username,
+                email: memberData.email,
+                password: memberData.password,
+            };
+            resolve(newMember);
+        }
     })
 });
 

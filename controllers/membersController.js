@@ -58,9 +58,9 @@ function getMember(req, res, next) {
         .then(([member, profilePicture]) => {
             if (!member) {
                 res.status(404);
-                throw new Error('User not found');
+                throw new Error(' not found');
             }
-            res.render('user', { user: member, profilePicture, idToModify: id, authenticatedUser }); // added user: member and idToModify: id
+            res.json({ member })
         })
         .catch((err) => {
             res.status(500);
@@ -68,11 +68,10 @@ function getMember(req, res, next) {
         });
 }
 
-
 function editMember(req, res, next) {
     const authenticatedUser = req.user;
     membersModel.getMember(req.params.id)
-        .then(user => res.render('editUser', {user, authenticatedUser }))
+        //.then(user => res.render('editUser', {user, authenticatedUser }))
         .catch(error => res.sendStatus(500))
 }
 
@@ -80,7 +79,7 @@ function editMember(req, res, next) {
 function updateMember(req, res, next) {
     membersModel.updateMember(req.body)
         .then(updatedMember => {
-            res.redirect(`/users/${updatedMember.id}`);
+            //res.redirect(`/users/${updatedMember.id}`);
         })
         .catch(error => {
             console.error('Error in the Controller', error)
@@ -90,20 +89,26 @@ function updateMember(req, res, next) {
 
 function addMember(req, res, next) {
     membersModel.addMember(req.body)
-        .then(() => res.redirect('/users'))
+        //.then(() => res.redirect('/users'))
         .catch(error => res.sendStatus(500))
 }
 
 function registerMember(req, res, next) {
     console.log("New member is being registered");
+    console.log('req.body', req.body);
     membersModel.registerMember(req.body)
-        .then(() => res.redirect('/'))
+        .then((member) => {
+            console.log('Registered member:', member);
+            res.json({ member });
+        })
         .catch(error => {
-                console.error('Error in Controller', error);
-                res.sendStatus(500);
-            }
-        )
+            console.error('Error in Controller', error);
+            res.status(500).json({ error: 'Internal Server Error' });
+        });
 }
+
+console.log('Before registering member'); // Add this line to check if the controller function is being executed
+
 
 function deleteMember(req, res, next) {
     membersModel.deleteMember(req.params.id)

@@ -26,7 +26,7 @@ export default {
     },
     methods: {
         fetchMembers() {
-            axios.get(import.meta.env.VITE_APP_API_BASE_URL + '/members')
+            axios.get(import.meta.env.VITE_APP_API_BASE_URL + '/api/members')
                 .then(response => {
                     this.members = response.data.members;
                 })

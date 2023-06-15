@@ -5,6 +5,10 @@ import Members from "../views/members.vue";
 import Member from '../views/Member.vue';
 import About from "../views/about.vue";
 import Profile from "../views/profile.vue";
+import Cart from "../views/cart.vue";
+import MyCart from "../views/myCart.vue";
+import Login from "../views/login.vue";
+import Register from "../views/register.vue";
 
 const routes = [
     {
@@ -39,6 +43,31 @@ const routes = [
         name: 'Profile',
         component: Profile
     },
+
+    {
+        path: '/cart',
+        name: 'Cart',
+        component: Cart
+    },
+
+    {
+        path: '/cart/:id',
+        name: 'MyCart',
+        component: MyCart
+    },
+
+    {
+        path: '/login',
+        name: 'Login',
+        component: Login
+    },
+
+    {
+        path: '/register',
+        name: 'Register',
+        component: Register
+    },
+
 ]
 
 const router = createRouter({
