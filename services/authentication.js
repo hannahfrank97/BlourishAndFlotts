@@ -3,16 +3,21 @@ const bcrypt = require('bcrypt');
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 
 async function checkPassword(password, hash) {
+    console.log(hash);
+    console.log(password);
     let pw = await bcrypt.compare(password, hash)
+    console.log(pw)
     return pw;
 }
 
 async function authenticateMember({email, password}, members, res) {
+    console.log('authenticate member wird ausgeführt')
     const member = members.find(u => {
-        return u.email === email
-    });
+        return u.email[0] === email
+
+    });console.log(email, password);
     if (member && await checkPassword(password, member.password)) {
-        console.log('test')
+        console.log('und ist genehmtigt')
         const accessToken = jwt.sign({id: member.id, name: member.username}, ACCESS_TOKEN_SECRET);
         const loggedMember = {id: member.id, username: member.username, img: member['profile picture']};
 
@@ -20,9 +25,11 @@ async function authenticateMember({email, password}, members, res) {
         res.cookie('loggedMember', JSON.stringify(loggedMember));
         res.cookie('loggedMemberImg', JSON.stringify(member['profile picture']));
         res.cookie('loggedMemberId', JSON.stringify(member.id));
-        res.send();
 
+        res.send(loggedMember);
+        console.log(loggedMember);
         return loggedMember;
+
     } else {
         throw new Error('Membername or password incorrect');
     }

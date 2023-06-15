@@ -7,19 +7,23 @@ const authenticationService = require('../services/authentication');
 const membersModel = require('../models/membersModel');
 const booksRouter = require('./books');
 const cartRouter = require('./cart');
+const bcrypt = require('bcrypt')
 
 router.route('/')
     .post((req, res, next) => {
         membersModel.getMembers()
             .then((members) => {
                 return authenticationService.authenticateMember(req.body, members, res)
+
             })
-            .then(authenticatedMember => {
+            /*.then(authenticatedMember => {
                 res.json(authenticatedMember);
-            })
+            })*/
             .catch((err) => {
                 res.status(500).json({ error: err.toString() });
+                console.error(err);
             })
+        console.log('BISCHDRIN');
     });
 
 router.get('/logout', (req, res) => {

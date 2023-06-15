@@ -9,6 +9,7 @@ const membersModel = require('../models/membersModel');
 const db = require('../services/database').config;
 const { config} = require('../services/database');
 const path = require('path');
+const bcrypt = require('bcrypt')
 
 router.use(authenticationService.authenticateJWT);
 
