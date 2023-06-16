@@ -12,6 +12,16 @@ let getMembers = () => new Promise((resolve, reject) => {
     })
 })
 
+let getMemberByMail = (mail) => new Promise((resolve, reject) => {
+    db.query("SELECT * FROM members WHERE email = "+db.escape(mail), function (err, members, fields) {
+        if (err) {
+            reject(err);
+        } else {
+            resolve(members);
+        }
+    })
+})
+
 let getMember = (id) => new Promise((resolve, reject) => {
     db.query("SELECT * FROM members WHERE Id =" + id, function (err, member, fields) {
         if (err) {
@@ -137,4 +147,5 @@ module.exports = {
     deleteMember,
     getProfilePicture,
     savePicture,
+    getMemberByMail
 }

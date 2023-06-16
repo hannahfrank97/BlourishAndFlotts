@@ -5,8 +5,10 @@ const {v4: uuidv4} = require("uuid");
 const multer = require('multer');
 const uploads = multer({ dest: 'uploads/' }).single('image');
 const fs = require("fs");
+const bcrypt = require('bcrypt')
 
 function getMembers(req, res, next) {
+    console.log('i am getting the members')
     membersModel.getMembers()
         .then((members) => {
             res.json({ members })

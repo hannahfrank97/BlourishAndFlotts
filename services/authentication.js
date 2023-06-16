@@ -14,22 +14,18 @@ async function authenticateMember({email, password}, members, res) {
     console.log('authenticate member wird ausgeführt')
     const member = members.find(u => {
         return u.email[0] === email
+    });
 
-    });console.log(email, password);
+    console.log(email, password);
     if (member && await checkPassword(password, member.password)) {
-        console.log('und ist genehmtigt')
-        const accessToken = jwt.sign({id: member.id, name: member.username}, ACCESS_TOKEN_SECRET);
-        const loggedMember = {id: member.id, username: member.username, img: member['profile picture']};
+        console.log('Username and Password correct')
+        const accessToken = jwt.sign({id: member.id, name: member.username, email}, ACCESS_TOKEN_SECRET);
 
+        console.log('Sending Cookie');
         res.cookie('accessToken', accessToken);
-        res.cookie('loggedMember', JSON.stringify(loggedMember));
-        res.cookie('loggedMemberImg', JSON.stringify(member['profile picture']));
-        res.cookie('loggedMemberId', JSON.stringify(member.id));
 
-        res.send(loggedMember);
-        console.log(loggedMember);
-        return loggedMember;
-
+        res.status(200).json({'success': 'jwt was created'});
+        return accessToken;
     } else {
         throw new Error('Membername or password incorrect');
     }
@@ -39,15 +35,18 @@ function authenticateJWT(req, res, next) {
     const token = req.cookies['accessToken'];
 
     if (token) {
+        console.log('Token was sent');
         jwt.verify(token, ACCESS_TOKEN_SECRET, (err, member) => {
             if (err) {
+                console.error('JWT verification error:', err);
                 return res.status(403).send('Invalid token');
             }
             req.member = member;
             next();
         });
     } else {
-        return res.status(401).send('No token provided');
+        console.log('Token missing!');
+        return res.status(401).json({'error':'token missing', 'message':'Plese send the JWT with your request'});
     }
 }
 
@@ -56,16 +55,17 @@ function getLoggedMember(req, res, next) {
 
     res.locals.loggedMemberId = req.cookies.loggedMemberId || null;
     res.locals.loggedMemberImg = req.cookies.loggedMemberImg || null;
-    res.locals.loggedMember = req.cookies.loggedMember || null;
+    res.locals.loggedMember = req.cookies.loggedMember ? JSON.parse(req.cookies.loggedMember) : null;
 
-    loggedMember.id = res.locals.loggedMember.id || null;
-    loggedMember.memberusername = res.locals.loggedMember.memberusername || null;
-    loggedMember.img = res.locals.loggedMember.img || null;
+    if (res.locals.loggedMember) {
+        loggedMember.id = res.locals.loggedMember.id || null;
+        loggedMember.memberusername = res.locals.loggedMember.memberusername || null;
+        loggedMember.img = res.locals.loggedMember.img || null;
+    }
 
     console.log(loggedMember.id);
     next();
 }
-
 
 module.exports = {
     authenticateMember,

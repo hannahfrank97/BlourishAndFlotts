@@ -5,7 +5,7 @@
             <h2>{{ member.username }}</h2>
             <p>{{ member.email }}</p>
         </div>
-        <div v-else>Ups.No member!</div>
+
     </div>
 
 </template>
@@ -25,7 +25,7 @@ export default {
     },
     methods: {
         fetchMember() {
-            axios.get(`${import.meta.env.VITE_APP_API_BASE_URL}/api/members/${this.$route.params.id}`)
+            axios.create({ withCredentials: true }).get(`${import.meta.env.VITE_APP_API_BASE_URL}/api/members/${this.$route.params.id}`)
                 .then(response => {
                     this.member = response.data.member;
                 })

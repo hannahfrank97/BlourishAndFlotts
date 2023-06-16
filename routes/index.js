@@ -9,32 +9,35 @@ const booksRouter = require('./books');
 const cartRouter = require('./cart');
 const bcrypt = require('bcrypt')
 
-router.route('/')
+router.get('/', (req, res, next) => res.send({'message':'Welcome to the API of Blourish and Flotts'}));
+router.route('/login')
+    .get((req, res, next) => res.status(401).json({'error':'wrong http request','message':'please use a post request'}))
     .post((req, res, next) => {
-        membersModel.getMembers()
-            .then((members) => {
-                return authenticationService.authenticateMember(req.body, members, res)
-
-            })
-            /*.then(authenticatedMember => {
-                res.json(authenticatedMember);
-            })*/
-            .catch((err) => {
-                res.status(500).json({ error: err.toString() });
-                console.error(err);
-            })
-        console.log('BISCHDRIN');
+        const {email, password} = req.body;
+        console.log("User",email,"trying to login with", password);
+        if(email && password) {
+            membersModel.getMemberByMail(email)
+                .then((member) => {
+                     authenticationService.authenticateMember(req.body, member, res);
+                })
+                /*.then(authenticatedMember => {
+                    res.json(authenticatedMember);
+                })*/
+                .catch((err) => {
+                    res.status(500).json({error: err.toString()});
+                    console.error(err);
+                })
+            console.log('BISCHDRIN');
+        } else
+            res.status(401).json({'error':'missing data', 'message':'please include email and password in the request'})
     });
 
 router.get('/logout', (req, res) => {
     res.cookie('accessToken', '', {maxAge: 0});
-    res.cookie('loggedMember', '', {maxAge: 0});
     res.redirect('/');
 })
 
 router.post('/register', membersController.registerMember);
-
-router.use(authenticationService.authenticateJWT);
 
 router.get('/cookies', (req, res, next) => {
 

@@ -26,7 +26,7 @@ export default {
     },
     methods: {
         fetchCart() {
-            axios.get(import.meta.env.VITE_APP_API_BASE_URL + '/api/cart')
+            axios.create({ withCredentials: true }).get(import.meta.env.VITE_APP_API_BASE_URL + '/api/cart')
                 .then(response => {
                     this.cart = response.data.cart;
                 })

@@ -24,7 +24,7 @@ export default {
     },
     methods: {
         fetchBooks() {
-            axios.get(import.meta.env.VITE_APP_API_BASE_URL + '/api/shop')
+            axios.create({ withCredentials: true }).get(import.meta.env.VITE_APP_API_BASE_URL + '/api/shop')
                 .then(response => {
                     this.books = response.data.books;
                 })
