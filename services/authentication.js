@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
+const cartModel = require('../models/cartModel');
+const cartController = require('../controllers/cartController');
 
 async function checkPassword(password, hash) {
     console.log(hash);
@@ -46,7 +48,7 @@ function authenticateJWT(req, res, next) {
         });
     } else {
         console.log('Token missing!');
-        return res.status(401).json({'error':'token missing', 'message':'Plese send the JWT with your request'});
+        return res.status(401).json({'error':'token missing', 'message':'Please send the JWT with your request'});
     }
 }
 
@@ -67,8 +69,22 @@ function getLoggedMember(req, res, next) {
     next();
 }
 
+async function clearCartForPreviousMember(req, res, next) {
+    const currentMemberId = req.member.id;
+    const previousMemberId = req.cookies.loggedMemberId;
+
+    if (currentMemberId !== previousMemberId) {
+        // Clear the cart for the previous member
+        await cartModel.clearCartForMember(previousMemberId);
+    }
+
+    next();
+}
+
 module.exports = {
     authenticateMember,
     authenticateJWT,
     getLoggedMember,
+    clearCartForPreviousMember,
+
 }

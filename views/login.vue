@@ -27,6 +27,8 @@ export default {
                     password: this.password,
                 }, {withCredentials: true});
 
+                this.$router.push('/');
+
             } catch (error) {
                 console.error(error);
             }

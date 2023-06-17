@@ -23,7 +23,7 @@ router.get('/:id/delete', membersController.deleteMember);
 
 router.get('/:id/uploads', (req, res) => {
     const memberId = req.params.id;
-    res.render('profilePicture', { userId: memberId }); // changed userId to memberId
+    res.render('profilePicture', { userId: memberId });
 })
 
 router.post('/:id/uploads', membersController.savePicture);
