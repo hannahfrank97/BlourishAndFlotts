@@ -1,35 +1,7 @@
 const db = require('../services/database').config;
 const bcrypt = require('bcrypt');
 
-let addToCart = (memberId, bookId) => {
-    return new Promise((resolve, reject) => {
-        const getCartIdQuery = "SELECT id FROM cart WHERE members_id = ?";
-        db.query(getCartIdQuery, [memberId], function (err, cartResult) {
-            if (err) {
-                reject(err);
-                return;
-            }
-
-            let cartId;
-            if (cartResult.length > 0) {
-                cartId = cartResult[0].id;
-                insertOrUpdateItem(cartId, bookId, resolve, reject);
-            } else {
-                const createCartQuery = "INSERT INTO cart (members_id) VALUES (?)";
-                db.query(createCartQuery, [memberId], function (err, createResult) {
-                    if (err) {
-                        reject(err);
-                        return;
-                    }
-
-                    cartId = createResult.insertId;
-                    insertOrUpdateItem(cartId, bookId, resolve, reject);
-                });
-            }
-        });
-    });
-};
-
+//receiving the cart details of a specific member
 let getMemberCart = (memberId) => new Promise((resolve, reject) => {
     const query = `
         SELECT 
@@ -62,6 +34,37 @@ let getMemberCart = (memberId) => new Promise((resolve, reject) => {
     });
 });
 
+//adding the book to the member´s cart and checking if the members´s cart already exists
+let addToCart = (memberId, bookId) => {
+    return new Promise((resolve, reject) => {
+        const getCartIdQuery = "SELECT id FROM cart WHERE members_id = ?";
+        db.query(getCartIdQuery, [memberId], function (err, cartResult) {
+            if (err) {
+                reject(err);
+                return;
+            }
+
+            let cartId;
+            if (cartResult.length > 0) {
+                cartId = cartResult[0].id;
+                insertOrUpdateItem(cartId, bookId, resolve, reject);
+            } else {
+                const createCartQuery = "INSERT INTO cart (members_id) VALUES (?)";
+                db.query(createCartQuery, [memberId], function (err, createResult) {
+                    if (err) {
+                        reject(err);
+                        return;
+                    }
+
+                    cartId = createResult.insertId;
+                    insertOrUpdateItem(cartId, bookId, resolve, reject);
+                });
+            }
+        });
+    });
+};
+
+//inserting the item into a member´s new cart or and updating the item´s amount if the cart already exists
 function insertOrUpdateItem(cartId, bookId, resolve, reject) {
     const checkBookQuery = "SELECT * FROM items WHERE cart_id = ? AND books_id = ?";
     db.query(checkBookQuery, [cartId, bookId], function (err, result) {
@@ -93,6 +96,7 @@ function insertOrUpdateItem(cartId, bookId, resolve, reject) {
     });
 }
 
+//deleting a member´s cart
 function clearCartForMember(memberId) {
     return new Promise((resolve, reject) => {
         const clearCartQuery = 'DELETE FROM cart WHERE members_id = ?';
@@ -106,9 +110,10 @@ function clearCartForMember(memberId) {
     });
 }
 
+//items get marked as Bought within the database if the member clicks un "Buy"
 function markItemsAsBought(cartId, itemIds) {
     const query = 'UPDATE items SET isBought = 1 WHERE cart_id = ? AND books_id IN (?)';
-    const params = [cartId, itemIds];  // Updated parameter
+    const params = [cartId, itemIds];
 
     return new Promise((resolve, reject) => {
         db.query(query, params, function (err, result) {

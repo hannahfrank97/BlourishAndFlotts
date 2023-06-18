@@ -11,14 +11,12 @@
             </div>
         </div>
         <div class="button-container">
-            <Button />
+            <Button :button-text="buttonText1"/>
         </div>
     </div>
 
-
-
-
 </template>
+
 
 <script>
 import Navbar from "../src/components/navbar.vue";
@@ -28,6 +26,12 @@ export default {
     components: {
         Button,
         Navbar,
+    },
+
+    data() {
+        return {
+            buttonText1: 'OUR BEWITCHED BOOKSHELF',
+        };
     },
 };
 </script>

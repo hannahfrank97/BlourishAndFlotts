@@ -9,10 +9,10 @@ router.use(authenticationService.clearCartForPreviousMember);
 router.get('/', authenticationService.clearCartForPreviousMember, (req, res, next) => {
     res.locals.meta = { requiresAuth: true };
     next();
-}, cartController.getMemberCart); //clears the cart for the next logged in member
+}, cartController.getMemberCart);
 
 router.post('/', authenticationService.clearCartForPreviousMember, (req, res, next) => {
-    res.locals.meta = { requiresAuth: true }; //clears the cart for the next logged in member
+    res.locals.meta = { requiresAuth: true };
     next();
 }, cartController.addToCart);
 

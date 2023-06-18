@@ -29,16 +29,15 @@ function addToCart(req, res, next) {
         });
 }
 
-
 function buyItems(req, res, next) {
     const memberId = req.member.id;
-    const itemIds = req.body.itemIds; // it's an array now
+    const itemIds = req.body.itemIds;
 
     cartModel.getMemberCart(memberId)
         .then((cartData) => {
             if (cartData.length > 0) {
                 let cartId = cartData[0].cartId;
-                cartModel.markItemsAsBought(cartId, itemIds) // passing the array to markItemsAsBought
+                cartModel.markItemsAsBought(cartId, itemIds)
                     .then(() => {
                         res.sendStatus(200);
                     })
@@ -47,7 +46,7 @@ function buyItems(req, res, next) {
                         res.sendStatus(500);
                     });
             } else {
-                res.status(400).send("No cart found for this user");
+                res.status(400).send("Unfortunately we could not find a cart for this member");
             }
         })
         .catch((err) => {

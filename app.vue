@@ -21,23 +21,6 @@
 
 <script>
 
-/*export default {
-    data () {
-        return {
-            data :[],
-        };
-    },
-
-    created () {
-    fetch("http://localhost:3000")
-        .then(res => res.json())
-        .then (data => {
-        this data = data;
-        })
-        .catch (err => console.error(err));
-
-    },
-};*/
 </script>
 
 <style>

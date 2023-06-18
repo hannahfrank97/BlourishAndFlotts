@@ -51,7 +51,7 @@ export default {
             axios.create({withCredentials: true})
                 .post(`${import.meta.env.VITE_APP_API_BASE_URL}/api/cart/buy`, { itemIds: selectedBookIds }) // assuming your buy route is /api/cart/buy
                 .then(() => {
-                    this.$toast.success('Items bought successfully!', { duration: 3000 });
+                    this.$toast.success('Thank you for shopping at Flourish & Blotts!', { duration: 3000 });
                     setTimeout(this.$toast.clear, 3000);
                     this.fetchCart();
                 })
@@ -59,9 +59,6 @@ export default {
                     console.error(error);
                 });
         }
-
-
-
 
     },
 
@@ -81,7 +78,6 @@ export default {
             }
         },
 
-
     },
 
     computed: {
@@ -92,9 +88,5 @@ export default {
                 return this.cart[0].totalPrice;
             }
         }
-
-
     }
-
-
 </script>
