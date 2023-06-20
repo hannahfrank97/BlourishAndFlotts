@@ -21,11 +21,4 @@ router.get('/:id/edit',membersController.editMember);
 
 router.get('/:id/delete', membersController.deleteMember);
 
-router.get('/:id/uploads', (req, res) => {
-    const memberId = req.params.id;
-    res.render('profilePicture', { userId: memberId });
-})
-
-router.post('/:id/uploads', membersController.savePicture);
-
 module.exports = router;

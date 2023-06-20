@@ -23,7 +23,7 @@ let getMemberByMail = (mail) => new Promise((resolve, reject) => {
 })
 
 let getMember = (id) => new Promise((resolve, reject) => {
-    db.query("SELECT * FROM members WHERE Id =" + id, function (err, member, fields) {
+    db.query("SELECT * FROM members WHERE id =" + id, function (err, member, fields) {
         if (err) {
             reject(err);
         } else {
@@ -32,7 +32,6 @@ let getMember = (id) => new Promise((resolve, reject) => {
     })
 })
 
-//...
 
 let updateMember = (memberData) => new Promise(async (resolve, reject)=>{
     let sql = "UPDATE members SET " + // changed users to members
@@ -54,7 +53,7 @@ let updateMember = (memberData) => new Promise(async (resolve, reject)=>{
 
 
 let addMember = (memberData) => new Promise(async (resolve, reject) => {
-console.log('test')
+    console.log('test')
     memberData.password = await bcrypt.hash(memberData.password, 10);
     let sql = "INSERT INTO members (username, email, password) VALUES " +
         "( " +

@@ -1,64 +1,46 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Home from '../views/home.vue';
-import Shop from "../views/shop.vue";
-import Members from "../views/members.vue";
-import Member from '../views/Member.vue';
-import About from "../views/about.vue";
-import Profile from "../views/profile.vue";
-import Cart from "../views/cart.vue";
-import Login from "../views/login.vue";
-import Register from "../views/register.vue";
 
 const routes = [
     {
         path: '/',
         name: 'Home',
-        component: Home
+        component: ()=> import('../views/home.vue')
     },
     {
         path: '/shop',
         name: 'Shop',
-        component: Shop
+        component: ()=> import('../views/shop.vue')
     },
     {
         path: '/members',
         name: 'Members',
-        component: Members
+        component: ()=> import('../views/members.vue')
     },
 
     {
-        path: '/members/:id',
+        path: '/members/:memberId',
         name: 'Member',
-        component: Member
+        params: true,
+        component: ()=> import('../views/member.vue')
     },
 
-    {
-        path: '/about',
-        name: 'About',
-        component: About
-    },
-    {
-        path: '/profile',
-        name: 'Profile',
-        component: Profile
-    },
 
     {
         path: '/cart/:memberId',
         name: 'Cart',
-        component: Cart
+        component: ()=> import('../views/cart.vue')
     },
 
     {
         path: '/login',
         name: 'Login',
-        component: Login
+        component: ()=> import('../views/login.vue')
     },
 
     {
         path: '/register',
         name: 'Register',
-        component: Register
+        component: ()=> import('../views/register.vue')
     },
 
 ]

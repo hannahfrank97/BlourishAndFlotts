@@ -19,7 +19,7 @@
 }
 
 .custom-height {
-    height: 50%;
+    height: 60%;
 }
 
 .custom-shadow {

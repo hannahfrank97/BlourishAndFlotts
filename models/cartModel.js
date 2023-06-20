@@ -6,7 +6,7 @@ let getMemberCart = (memberId) => new Promise((resolve, reject) => {
     const query = `
         SELECT 
             members.id AS memberId, members.username, members.email,
-            cart.id AS cartId,
+            cart.id AS cartId, booksList.image,
             (
                 SELECT SUM(books.price * items.amount) 
                 FROM items 
@@ -17,7 +17,7 @@ let getMemberCart = (memberId) => new Promise((resolve, reject) => {
         FROM cart
         INNER JOIN members ON cart.members_id = members.id
         INNER JOIN (
-            SELECT items.cart_id, books.id AS bookId, books.title, books.price, SUM(items.amount) AS amount
+            SELECT items.cart_id, books.id AS bookId, books.title, books.price, SUM(items.amount) AS amount, books.image
             FROM items 
             INNER JOIN books ON items.books_id = books.id
             GROUP BY items.cart_id, books.id
@@ -63,6 +63,8 @@ let addToCart = (memberId, bookId) => {
         });
     });
 };
+
+let deleteItemfromCart = (memberId, bookId)
 
 //inserting the item into a member´s new cart or and updating the item´s amount if the cart already exists
 function insertOrUpdateItem(cartId, bookId, resolve, reject) {

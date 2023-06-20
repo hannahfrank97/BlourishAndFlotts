@@ -1,7 +1,6 @@
 <template>
     <div class="banner my-0.1">
-    </div>/
-
+    </div>
 </template>
 
 <script setup>

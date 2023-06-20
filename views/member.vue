@@ -1,37 +1,90 @@
 <template>
     <div>
-        <h1>Hello, this is my member page</h1>
+        <navbar class="relative z-30" />
+        <router-view />
+        <div class="relative h-screen">
+            <Banner />
+            <div class="member-container-wrapper absolute w-full top-10">
         <div v-if="member">
-            <h2>{{ member.username }}</h2>
-            <p>{{ member.email }}</p>
+            <img :src="getImageSource(member.image)" class="member-image" :alt="member.username" />
+            <h2 class="member_username"> {{ member.username }}</h2>
+            <p class="member_email"> {{ member.email }}</p>
         </div>
-
     </div>
-
+    </div>
+    </div>
 </template>
 
 <script>
 import axios from 'axios';
-import members from "./members.vue";
+import memberRectangle from "@/components/memberRectangle.vue";
+import Navbar from "@/components/navbar.vue";
+import Banner from "@/components/banner.vue";
 
 export default {
+    components: {Banner, Navbar},
+    props: ['member'],
     data() {
         return {
-            member: null,
-        };
-    },
+            member: {},
+        }
+        },
     mounted() {
         this.fetchMember();
     },
     methods: {
         fetchMember() {
-            axios.create({ withCredentials: true }).get(`${import.meta.env.VITE_APP_API_BASE_URL}/api/members/${this.$route.params.id}`)
-                .then(response => {
+            console.log(this.$route.params.memberId);
+            let memberID = this.$route.params.memberId
+            axios
+                .create({ withCredentials: true })
+                .get(`${import.meta.env.VITE_APP_API_BASE_URL}/api/members/${memberID}`)
+                .then((response) => {
+                    console.log(response.data.member);
                     this.member = response.data.member;
                 })
-                .catch(error => console.error(error));
+                .catch((error) => console.error(error));
+        },
+        getImageSource(imageName) {
+            return '/src/images/' + imageName;
         },
     },
 };
-
 </script>
+
+
+<style>
+
+.member-image {
+    width: 400px;
+    height: 400px;
+    margin-top: 40%;
+    filter: drop-shadow(0px 10px 40px rgba(103, 128, 156, 1));
+    border-radius: 4%;
+}
+
+.member-container-wrapper {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    display: flex;
+    justify-content: center;
+
+}
+
+.member_username {
+    color: #D3A625;
+    font-size: 1.4rem;
+    text-align: center;
+    margin-top: 3%;
+}
+
+.member_email {
+    color: #D3A625;
+    text-align: center;
+    font-size: 1.2rem;
+}
+</style>
+
+
+

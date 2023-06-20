@@ -51,12 +51,12 @@ function savePicture (req, res, next) {
 
 function getMember(req, res, next) {
     const id = req.params.id;
+    console.log(req.params.id)
     const authenticatedUser = req.user;
     Promise.all([
-        membersModel.getMember(id),
-        membersModel.getProfilePicture(id)
-
+        membersModel.getMember(id)
     ])
+
         .then(([member, profilePicture]) => {
             if (!member) {
                 res.status(404);

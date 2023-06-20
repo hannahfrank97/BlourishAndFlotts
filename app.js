@@ -19,6 +19,7 @@ app.use(morgan('combined', { stream: accessLogStream }))
 app.use(morgan('short'))
 
 app.use(cors({
+    /*origin: 'https://cc221009-10130.node.fhstp.io',*/
     origin: 'http://localhost:5173',
     credentials: true
 }));

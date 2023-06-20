@@ -1,6 +1,6 @@
 <template>
     <navbar />
-
+    <router-view />
     <div class="banner">
         <div class="content-container">
             <div class="text-container">
@@ -10,9 +10,11 @@
                 <img src="../src/images/bannerImage.png" alt="two books" class="banner_image">
             </div>
         </div>
+        <router-link to="/shop">´
         <div class="button-container">
             <Button :button-text="buttonText1"/>
         </div>
+        </router-link>
     </div>
 
 </template>
@@ -30,7 +32,7 @@ export default {
 
     data() {
         return {
-            buttonText1: 'OUR BEWITCHED BOOKSHELF',
+            buttonText1: 'BOOKSHELF',
         };
     },
 };
