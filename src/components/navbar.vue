@@ -20,6 +20,9 @@
             <li class="navbar-link">
                 <router-link to="/login">Login</router-link>
             </li>
+            <li class="navbar-link">
+                <a @click="logout">Logout</a>
+            </li>
         </ul>
 
         </div>
@@ -27,7 +30,35 @@
 </template>
 
 
-<script setup>
+<script>
+import axios from 'axios';
+import { useRouter } from 'vue-router';
+import Button from "@/components/button.vue";
+import ContentRectangle from "@/components/contentRectangle.vue";
+import Banner from "@/components/banner.vue";
+const router = useRouter();
+
+export default {
+    data() {
+        return {
+            member: {}
+        };
+    },
+
+    methods: {
+        async logout() {
+            console.log('inside the logout method')
+            try {
+                console.log('inside the logout method2')
+                await axios.post(import.meta.env.VITE_APP_API_BASE_URL + '/api/logout', {}, {withCredentials: true});
+                this.$router.push('/');
+            } catch (error) {
+                console.error('Error during logout:', error);
+            }
+        }
+    }
+};
+
 </script>
 
 <style>
@@ -43,6 +74,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    filter: drop-shadow(0px 5px 60px #d31027);
+    z-index: 1000;
 }
 .logo-container {
     position: absolute;
@@ -86,6 +119,5 @@
     margin-left: 6rem;
 
 }
-
 
 </style>

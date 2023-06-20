@@ -55,8 +55,22 @@ function buyItems(req, res, next) {
         });
 }
 
+function removeItemFromCart(req, res, next) {
+    const memberId = req.member.id;
+    const bookId = req.body.bookId;
+
+    cartModel.removeItemFromCart(memberId, bookId)
+        .then((result) => {
+            res.json({ message: result.message });
+        })
+        .catch((err) => {
+            res.status(500).json({ error: err });
+        });
+}
+
 module.exports = {
     getMemberCart,
     addToCart,
     buyItems,
+    removeItemFromCart,
 }

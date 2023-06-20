@@ -17,6 +17,7 @@ router.get('/', membersController.getMembers);
 
 router.get('/:id', membersController.getMember);
 
+
 router.get('/:id/edit',membersController.editMember);
 
 router.get('/:id/delete', membersController.deleteMember);

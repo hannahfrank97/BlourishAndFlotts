@@ -1,8 +1,7 @@
 <template>
     <div>
-        <navbar class="relative z-30" />
+        <navbar />
         <router-view />
-        <div class="banner-container relative">
             <Banner style="height: 370vh;"/>
             <div class="book-container-wrapper absolute w-full top-10">
                 <div class="book-container">
@@ -12,7 +11,6 @@
                 </div>
             </div>
         </div>
-    </div>
 </template>
 
 
@@ -84,13 +82,18 @@ export default {
     justify-content: space-between;
     width: 80%;
     margin-left: 2%;
-    margin-top: 0;
+    margin-top: 15%;
     margin-bottom: 10%;
 }
 
 .book-container > div {
     flex: 1 0 20%; /* grow | shrink | basis */
     margin: 2.5em;
+}
+
+.banner-container {
+    position: relative;
+    margin-top: 6%;
 }
 
 </style>

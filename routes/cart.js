@@ -22,5 +22,10 @@ router.post('/buy', authenticationService.clearCartForPreviousMember, (req, res,
     next();
 }, cartController.buyItems);
 
+router.post('/delete', authenticationService.clearCartForPreviousMember, (req, res, next) => {
+    res.locals.meta = { requiresAuth: true };
+    next();
+}, cartController.removeItemFromCart);
+
 
 module.exports = router;

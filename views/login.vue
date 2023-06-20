@@ -1,8 +1,7 @@
 <template>
     <div>
-        <navbar class="relative z-30" />
+        <navbar />
         <router-view />
-        <div class="relative h-screen">
             <Banner />
             <contentRectangle>
                 <div class="flex flex-col">
@@ -26,7 +25,6 @@
                 </p>
             </contentRectangle>
         </div>
-    </div>
 </template>
 
 <script>
@@ -60,6 +58,8 @@ export default {
             }
         },
 
+
+
     }
 };
 </script>
@@ -67,7 +67,7 @@ export default {
 <style>
 
 .login_text {
-    color: #04befe;
+    color: #D3A625;
     text-shadow: 0 0 40px rgba(37, 170, 225, 0.5);
     font-size: 1.1rem;
 }

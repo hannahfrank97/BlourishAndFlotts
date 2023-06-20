@@ -1,7 +1,7 @@
 <template>
     <div>
-        <Navbar class="relative z-30" />
-        <div class="relative h-screen">
+        <Navbar />
+        <router-view />
             <Banner />
             <contentRectangle>
                 <div class="flex flex-col">
@@ -13,7 +13,6 @@
                 </div>
             </contentRectangle>
         </div>
-    </div>
 </template>
 
 <script>

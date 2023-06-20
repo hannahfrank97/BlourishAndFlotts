@@ -2,7 +2,6 @@
     <div>
         <navbar class="relative z-30" />
         <router-view />
-        <div class="relative h-screen">
             <Banner />
             <div class="member-container-wrapper absolute w-full top-10">
         <div v-if="member">
@@ -10,7 +9,6 @@
             <h2 class="member_username"> {{ member.username }}</h2>
             <p class="member_email"> {{ member.email }}</p>
         </div>
-    </div>
     </div>
     </div>
 </template>

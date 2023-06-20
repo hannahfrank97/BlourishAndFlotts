@@ -32,9 +32,8 @@ router.route('/login')
             res.status(401).json({'error':'missing data', 'message':'please include email and password in the request'})
     });
 
-router.get('/logout', (req, res) => {
-    res.cookie('accessToken', '', {maxAge: 0});
-    res.redirect('/');
+router.post('/logout', (req, res) => {
+    res.cookie('accessToken', '', {expires: new Date(0)});
 })
 
 router.post('/register', membersController.registerMember);

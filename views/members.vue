@@ -1,9 +1,8 @@
 <template>
+    <navbar />
     <div>
-        <navbar class="relative z-30" />
         <router-view />
-        <div class="banner-container relative">
-            <Banner style="height: 190vh;"/>
+            <Banner style="height: 250vh;"/>
             <div class="member-container-wrapper absolute w-full top-10">
                 <div class="member-container">
                     <div v-for="member in members" :key="member.id">
@@ -12,7 +11,6 @@
                 </div>
             </div>
         </div>
-    </div>
 </template>
 
 
@@ -48,14 +46,10 @@ export default {
 </script>
 
 <style>
-.banner-container {
-    position: relative;
-}
 
 .member-container-wrapper {
     position: absolute;
     width: 100%;
-    top: 0;
     display: flex;
     justify-content: center;
 }
@@ -66,7 +60,7 @@ export default {
     justify-content: space-between;
     width: 80%;
     margin-left: 2%;
-    margin-top: 5%;
+    margin-top: 10%;
     margin-bottom: 10%;
 }
 

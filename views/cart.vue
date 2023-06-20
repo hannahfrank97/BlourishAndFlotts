@@ -1,25 +1,25 @@
 <template>
     <div>
-        <navbar class="relative z-30" />
         <router-view />
-        <div class="banner-container relative">
-            <Banner style="height: 190vh;" />
+        <navbar />
+            <Banner style="height: 300vh;" />
             <div class="member-container-wrapper absolute w-full top-10">
                 <div class="item-container">
-                    <div v-for="item in cart" :key="item.bookId">
+
+                    <div v-for="item in cart" :key="item.bookId" class="cart_item">
                         <img :src="getImageSource(item.image)" class="item_images" :alt="item.title" />
                         <h2 class="item_amount">{{ item.amount }}</h2>
                         <h1 class="item_title">{{ item.title }}</h1>
                         <h3 class="item_price">{{ formatPrice(item.price * item.amount) }}</h3>
-                        <cartButton :button-text="buttonText5"  @click="buyItems(item.bookId)" />
-
+                        <cartButton :button-text="buttonText5" @click="buyItems(item.bookId)" />
+                        <redButton :button-text7="buttonText7" @click="deleteFromCart(item.bookId)"/>
                     </div>
 
-                    <h1 class="total_price">Total Price: {{ formatPrice(totalPrice) }}</h1>
+
                 </div>
+                <h1 class="total_price">Total Price: {{ formatPrice(totalPrice) }}</h1>
             </div>
         </div>
-    </div>
 </template>
 
 <script>
@@ -27,14 +27,17 @@ import axios from 'axios';
 import Navbar from "@/components/navbar.vue";
 import Banner from "@/components/banner.vue";
 import CartButton from "@/components/cartButton.vue";
+import redButton from "@/components/redButton.vue";
 
 export default {
-    components: {CartButton, Banner, Navbar},
+    components: {CartButton, Banner, Navbar, redButton},
     data() {
         return {
             cart: [],
             books: [],
+            members: [],
             buttonText5: 'Buy this cool item',
+            buttonText7: 'Delete me',
         };
     },
     mounted() {
@@ -64,7 +67,7 @@ export default {
 
         buyItems(selectedBookIds) {
             axios.create({withCredentials: true})
-                .post(`${import.meta.env.VITE_APP_API_BASE_URL}/api/cart/buy`, { itemIds: selectedBookIds }) // assuming your buy route is /api/cart/buy
+                .post(`${import.meta.env.VITE_APP_API_BASE_URL}/api/cart/buy`, { itemIds: selectedBookIds })
                 .then(() => {
                     this.$toast.success('Thank you for shopping at Flourish & Blotts!', { duration: 3000 });
                     setTimeout(this.$toast.clear, 3000);
@@ -73,6 +76,23 @@ export default {
                 .catch((error) => {
                     console.error(error);
                 });
+        },
+
+        deleteFromCart (itemID) {
+            console.log('jetzt wird gelöscht')
+            axios.create({ withCredentials: true })
+                .post(import.meta.env.VITE_APP_API_BASE_URL + '/api/cart/delete', { bookId: itemID})
+                .then(response => {
+                    console.log('ist gelöscht')
+                    this.$toast.warning('The item was removed successfully from your cart.', { duration: 3000 });
+                    setTimeout(this.$toast.clear, 3000);
+                    window.location.assign(window.location.href);
+                    })
+
+                .catch(error => {
+                    console.error(error);
+                });
+
         }
 
     },
@@ -89,7 +109,7 @@ export default {
                     this.fetchCart();
                 }
             } else {
-                this.cart = []; // Reset the cart data if not on the cart page or if not logged in
+                this.cart = [];
             }
         },
 
@@ -113,6 +133,7 @@ export default {
     top: 0;
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
 
 }
 
@@ -127,6 +148,7 @@ export default {
     color: #D3A625;
     text-align: center;
     font-size: 1.2rem;
+
 }
 
 .item_price {
@@ -140,11 +162,11 @@ export default {
 .item_images {
     filter: drop-shadow(0px 10px 40px rgba(103, 128, 156, 1));
     height: 300px;
-    width: 250px;
+
 }
 
 .total_price {
-    margin-top: 30%;
+    margin-top: 3%;
     color: #D3A625;
     font-size: 2rem;
 
@@ -154,7 +176,17 @@ export default {
 .item-container {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 15%;
+   max-width: 80%;
+    margin-left: 5%;
 }
+
+.cart_item {
+    flex: 1 0 calc(33.3333% - 100px); /* flex-grow flex-shrink flex-basis */
+    margin: 10px;
+}
+
 
 </style>

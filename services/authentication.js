@@ -74,7 +74,6 @@ async function clearCartForPreviousMember(req, res, next) {
     const previousMemberId = req.cookies.loggedMemberId;
 
     if (currentMemberId !== previousMemberId) {
-        // Clear the cart for the previous member
         await cartModel.clearCartForMember(previousMemberId);
     }
 
@@ -85,6 +84,6 @@ module.exports = {
     authenticateMember,
     authenticateJWT,
     getLoggedMember,
-    clearCartForPreviousMember,
+    clearCartForPreviousMember
 
 }

@@ -12,7 +12,7 @@
     letter-spacing: 2px;
     width: 80%;
     margin: 0 auto 1rem auto;
-    background: #131862;
+    /*background: #131862;*/
     display: flex;
     flex-direction: column;
     align-items: center;
