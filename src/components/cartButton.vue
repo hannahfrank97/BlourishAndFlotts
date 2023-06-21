@@ -39,7 +39,6 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-left: 20%;
 }
 
 .custom-button:hover {
@@ -62,6 +61,7 @@ export default {
     vertical-align: middle;
 }
 </style>
+
 
 
 

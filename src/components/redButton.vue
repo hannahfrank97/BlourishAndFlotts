@@ -17,7 +17,6 @@ export default {
 
 <style>
 .btn-red-gradient {
-    margin: 10%;
     text-align: center;
     line-height: 1.5;
     width: 150px;
@@ -32,7 +31,6 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-left: 20%;
 }
 
 .btn-red-gradient:hover {

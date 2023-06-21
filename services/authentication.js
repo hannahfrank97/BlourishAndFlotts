@@ -62,6 +62,7 @@ function getLoggedMember(req, res, next) {
     if (res.locals.loggedMember) {
         loggedMember.id = res.locals.loggedMember.id || null;
         loggedMember.memberusername = res.locals.loggedMember.memberusername || null;
+        loggedMember.memberemail = res.locals.loggedMember.memberemail || null;
         loggedMember.img = res.locals.loggedMember.img || null;
     }
 

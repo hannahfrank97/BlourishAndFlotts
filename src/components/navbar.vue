@@ -17,46 +17,61 @@
             <li class="navbar-link">
                 <router-link to="/members">Our Ensemble</router-link>
             </li>
-            <li class="navbar-link">
+            <li class="navbar-link" v-if="!isLoggedIn">
                 <router-link to="/login">Login</router-link>
             </li>
-            <li class="navbar-link">
+            <li class="navbar-link" v-else>
                 <a @click="logout">Logout</a>
             </li>
         </ul>
 
         </div>
     </div>
-</template>
 
+</template>
 
 <script>
 import axios from 'axios';
-import { useRouter } from 'vue-router';
-import Button from "@/components/button.vue";
-import ContentRectangle from "@/components/contentRectangle.vue";
-import Banner from "@/components/banner.vue";
-const router = useRouter();
 
 export default {
     data() {
         return {
-            member: {}
+            members: [],
+            isLoggedIn: false,
         };
+    },
+
+    created() {
+        this.checkLoginStatus();
     },
 
     methods: {
         async logout() {
-            console.log('inside the logout method')
             try {
-                console.log('inside the logout method2')
+                this.isLoggedIn = false;
                 await axios.post(import.meta.env.VITE_APP_API_BASE_URL + '/api/logout', {}, {withCredentials: true});
                 this.$router.push('/');
             } catch (error) {
                 console.error('Error during logout:', error);
             }
-        }
-    }
+
+            },
+
+        async checkLoginStatus() {
+            try {
+                const response = await axios.get(import.meta.env.VITE_APP_API_BASE_URL + '/api/isLoggedIn', {withCredentials: true});
+                if (response.data.loggedIn) {
+                    this.isLoggedIn = true;
+                } else {
+                    this.isLoggedIn = false;
+                }
+            } catch (error) {
+                console.error('Error checking login status:', error);
+            }
+
+        },
+
+    },
 };
 
 </script>
@@ -79,13 +94,13 @@ export default {
 }
 .logo-container {
     position: absolute;
-    top: 4%;  /* Adjust this value as needed to move the logo up or down */
+    top: 4%;
     left: 8%;
     transform: translateX(-50%);
 }
 
 .logo {
-    width: 150px;  /* Adjust this value as needed */
+    width: 150px;
     height: auto;
 
 }

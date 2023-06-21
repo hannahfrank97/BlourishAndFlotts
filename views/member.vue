@@ -64,7 +64,7 @@ export default {
 .member-container-wrapper {
     position: absolute;
     width: 100%;
-    top: 0;
+    top: 8%;
     display: flex;
     justify-content: center;
 

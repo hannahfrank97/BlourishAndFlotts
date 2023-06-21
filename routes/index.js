@@ -33,8 +33,21 @@ router.route('/login')
     });
 
 router.post('/logout', (req, res) => {
-    res.cookie('accessToken', '', {expires: new Date(0)});
+    res.clearCookie('accessToken');
+    res.end();
 })
+
+router.get('/isLoggedIn', (req, res) => {
+    if (req.cookies['accessToken']) {
+        res.json({ loggedIn: true });
+    } else {
+        res.json({ loggedIn: false });
+    }
+});
+
+
+
+
 
 router.post('/register', membersController.registerMember);
 

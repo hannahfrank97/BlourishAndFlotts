@@ -19,6 +19,7 @@ import axios from 'axios';
 import Navbar from "@/components/navbar.vue";
 import Banner from "@/components/banner.vue";
 import BookRectangle from "@/components/bookRectangle.vue";
+import {apiUrl} from "@/main";
 
 export default {
     components: {BookRectangle, Banner, Navbar},
@@ -34,7 +35,7 @@ export default {
     methods: {
         fetchBooks() {
             axios.create({ withCredentials: true })
-                .get(import.meta.env.VITE_APP_API_BASE_URL + '/api/shop')
+                .get(apiUrl + '/api/shop')
                 .then(response => {
                     this.books = response.data.books;
                 })
