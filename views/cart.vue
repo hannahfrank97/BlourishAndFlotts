@@ -12,9 +12,9 @@
                         <h2 class="item_amount">{{ item.amount }}</h2>
                         <h1 class="item_title">{{ item.title }}</h1>
                         <h3 class="item_price">{{ formatPrice(item.price * item.amount) }}</h3>
-                        <cartButton :button-text="buttonText5" @click="buyItems(item.bookId)"/>
                         <redButton :button-text7="buttonText7" @click="deleteFromCart(item.bookId)"/>
                     </div>
+                    <cartButton :button-text="buttonText5" @click="buyItems"/>
 
                 </div>
 
@@ -36,7 +36,7 @@ export default {
             cart: [],
             books: [],
             members: [],
-            buttonText5: 'Buy this cool item',
+            buttonText5: 'Buy',
             buttonText7: 'Delete me',
         };
     },
@@ -65,13 +65,12 @@ export default {
 
         },
 
-        buyItems(selectedBookIds) {
+        buyItems() {
             axios.create({withCredentials: true})
-                .post(`${import.meta.env.VITE_APP_API_BASE_URL}/api/cart/buy`, { itemIds: selectedBookIds })
+                .post(`${import.meta.env.VITE_APP_API_BASE_URL}/api/cart/buy`)
                 .then(() => {
-                    this.$toast.success('Thank you for shopping at Flourish & Blotts!', { duration: 3000 });
-                    setTimeout(this.$toast.clear, 3000);
                     this.fetchCart();
+                    this.$router.push('/cart/buy');
                 })
                 .catch((error) => {
                     console.error(error);
@@ -79,7 +78,6 @@ export default {
         },
 
         deleteFromCart (itemID) {
-            console.log('jetzt wird gelöscht')
             axios.create({ withCredentials: true })
                 .post(import.meta.env.VITE_APP_API_BASE_URL + '/api/cart/delete', { bookId: itemID})
                 .then(response => {

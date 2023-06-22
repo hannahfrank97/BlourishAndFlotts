@@ -24,11 +24,12 @@ export default {
     margin: 10%;
     text-align: center;
     line-height: 1.5;
+    font-size: 2rem;
 }
 
 .custom-button {
-    width: 150px;
-    height: 40px;
+    width: 250px;
+    height: 80px;
     color: #fff;
     cursor: pointer;
     text-align: center;

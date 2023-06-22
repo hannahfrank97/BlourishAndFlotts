@@ -32,22 +32,30 @@ export default {
             buttonText3: 'REGISTER',
         };
     },
-    methods: {
+        methods: {
+            async getUserData() {
+                try {
+                    const response = await axios.get(import.meta.env.VITE_APP_API_BASE_URL + '/api/userdata', {withCredentials: true});
+                } catch (error) {
+                    console.error(error);
+                }
+            },
+
         async register() {
             try {
-                const response = await axios.post(import.meta.env.VITE_APP_API_BASE_URL + '/api/register', {
+                 await axios.post(import.meta.env.VITE_APP_API_BASE_URL + '/api/register', {
                     username: this.username,
                     email: this.email,
                     password: this.password,
                 }, {withCredentials: true});
 
-                this.$router.push('/');
+                await this.getUserData();
 
+                this.$router.push('/');
             } catch (error) {
                 console.error(error);
             }
         },
-
-    }
+        },
 };
 </script>

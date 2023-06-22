@@ -43,8 +43,13 @@ export default {
                 })
                 .catch((error) => console.error(error));
         },
+
         getImageSource(imageName) {
-            return '/src/images/' + imageName;
+            if(imageName && imageName.trim() !== '') {
+                return '/src/images/' + imageName;
+            } else {
+                return '/src/images/logo.png';
+            }
         },
     },
 };

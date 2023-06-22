@@ -31,13 +31,12 @@ function addToCart(req, res, next) {
 
 function buyItems(req, res, next) {
     const memberId = req.member.id;
-    const itemIds = req.body.itemIds;
 
     cartModel.getMemberCart(memberId)
         .then((cartData) => {
             if (cartData.length > 0) {
                 let cartId = cartData[0].cartId;
-                cartModel.markItemsAsBought(cartId, itemIds)
+                cartModel.markAllItemsAsBought(cartId)
                     .then(() => {
                         res.sendStatus(200);
                     })

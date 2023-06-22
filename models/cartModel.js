@@ -129,7 +129,6 @@ let removeItemFromCart = (memberId, bookId) => {
     });
 };
 
-
 //inserting the item into a member´s new cart or and updating the item´s amount if the cart already exists
 function insertOrUpdateItem(cartId, bookId, resolve, reject) {
     const checkBookQuery = "SELECT * FROM items WHERE cart_id = ? AND books_id = ?";
@@ -177,12 +176,11 @@ function clearCartForMember(memberId) {
 }
 
 //items get marked as Bought within the database if the member clicks un "Buy"
-function markItemsAsBought(cartId, itemIds) {
-    const query = 'UPDATE items SET isBought = 1 WHERE cart_id = ? AND books_id IN (?)';
-    const params = [cartId, itemIds];
+function markAllItemsAsBought(cartId) {
+    const query = 'UPDATE items SET isBought = 1 WHERE cart_id = ?';
 
     return new Promise((resolve, reject) => {
-        db.query(query, params, function (err, result) {
+        db.query(query, [cartId], function (err, result) {
             if (err) {
                 reject(err);
             } else {
@@ -190,14 +188,14 @@ function markItemsAsBought(cartId, itemIds) {
             }
         });
     });
-
 }
+
 
 
 module.exports = {
     addToCart,
     getMemberCart,
-    markItemsAsBought,
+    markAllItemsAsBought,
     clearCartForMember,
     removeItemFromCart,
 }

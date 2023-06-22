@@ -1,7 +1,7 @@
 <template>
     <router-link :to="{ name: 'Member', params: { memberId: member.id }}">
         <div class="member-rectangle">
-            <img :src="getImageSource(member.image)" class="member_images" :alt="member.username" />
+            <img :src="getImageSource(member.image)" :class="{'default-image': isDefaultImage(member.image)}" class="member_images" :alt="member.username" />
             <h3 class="member_username">{{ member.username }}</h3>
             <p class="member_email">{{ member.email }}</p>
         </div>
@@ -13,8 +13,16 @@ export default {
     props: ['member'],
     methods: {
         getImageSource(imageName) {
-            return '/src/images/' + imageName;
+            if(imageName && imageName.trim() !== '') {
+                return '/src/images/' + imageName;
+            } else {
+                return '/src/images/logo.png';
+            }
         },
+
+        isDefaultImage(imageName) {
+            return !imageName || imageName.trim() === '' || imageName === 'logo.png';
+        }
     },
 };
 </script>
@@ -24,6 +32,7 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    align-items: center;
 }
 
 .member_images {
@@ -44,6 +53,13 @@ export default {
     color: #D3A625;
     text-align: center;
     font-size: 1rem;
+}
+
+.default-image {
+    width: 50%;
+    height: auto;
+
+
 }
 
 </style>

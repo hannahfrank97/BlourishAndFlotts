@@ -30,12 +30,16 @@ app.use(cookieParser());
 
 //app.use(authenticationService.getLoggedMember);
 
+app.use('/images', express.static('/images'));
+
+
 app.use(express.static(path.join(__dirname, 'dist')));
 
 app.use('/api', require('./routes/index'));
 app.use('/api/members', require('./routes/members'));
 app.use('/api/shop', require('./routes/books'));
 app.use('/api/cart', require('./routes/cart'));
+
 
 // routes
 app.get('/', (req, res) => {

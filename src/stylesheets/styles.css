@@ -14,12 +14,6 @@ body {
     src: url('src/assets/AbyssinciaSIL-Regular.ttf') format('truetype');
 }
 
-@font-face {
-    font-family: 'FKR Area51Life';
-    src: url('src/assets/fkr_area51life.ttf') format('truetype');
-}
-
-
 .profileContainer {
     display: flex;
     align-self: flex-start;
