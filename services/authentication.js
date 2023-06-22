@@ -15,7 +15,7 @@ async function checkPassword(password, hash) {
 async function authenticateMember({email, password}, members, res) {
     console.log('authenticate member wird ausgeführt')
     const member = members.find(u => {
-        return u.email[0] === email
+        return u.email === email
     });
 
     console.log(email, password);

@@ -4,7 +4,6 @@ const bodyParser = require('body-parser');
 const port = 3000;
 const path = require('path');
 const db = require('./services/database'); //database
-const websockets = require('./services/websockets'); // chat
 const cors = require('cors');
 const authenticationService = require("./services/authentication");
 const fs = require('fs')
