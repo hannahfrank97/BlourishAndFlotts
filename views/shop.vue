@@ -2,14 +2,21 @@
     <div>
         <navbar />
         <router-view />
-            <Banner style="height: 370vh;"/>
-            <div class="book-container-wrapper absolute w-full top-10">
+        <div class="container_p">
+            <p class="loggedin_text" v-if="!isLoggedIn">
+                Please <a href="./login">login</a> or <a href="./register">register</a> to see our magical shop!
+            </p>
+        </div>
+        <div class="whole_content">
+                <Banner style="height: 0vh;"/>
+             <div class="book-container-wrapper">
                 <div class="book-container">
                     <div v-for="book in books" :key="book.id">
                         <bookRectangle :book="book" @addToCart="addToCart" />
                     </div>
                 </div>
             </div>
+        </div>
         </div>
 </template>
 
@@ -26,6 +33,7 @@ export default {
     data() {
         return {
             books: [],
+            isLoggedIn: false,
 
         };
     },
@@ -38,6 +46,7 @@ export default {
                 .get(apiUrl + '/api/shop')
                 .then(response => {
                     this.books = response.data.books;
+                    this.isLoggedIn = this.books.length > 0;
                 })
                 .catch(error => console.error(error));
         },
@@ -65,12 +74,8 @@ export default {
 </script>
 
 <style>
-.banner-container {
-    position: relative;
-}
 
 .book-container-wrapper {
-    position: absolute;
     width: 100%;
     top: 0;
     display: flex;
@@ -82,9 +87,6 @@ export default {
     flex-wrap: wrap;
     justify-content: space-between;
     width: 80%;
-    margin-left: 2%;
-    margin-top: 15%;
-    margin-bottom: 10%;
 }
 
 .book-container > div {
@@ -95,6 +97,22 @@ export default {
 .banner-container {
     position: relative;
     margin-top: 6%;
+}
+
+
+@media screen and (min-width: 330px) and (max-width:622px) {
+
+    .book-container {
+        width: 100%;
+        flex-direction: column;
+        margin: 2% auto;
+
+    }
+
+    .book-container-wrapper {
+        flex-direction: column;
+    }
+
 }
 
 </style>

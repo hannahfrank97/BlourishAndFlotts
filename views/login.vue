@@ -2,26 +2,25 @@
     <div>
         <navbar />
         <router-view />
-            <Banner />
-            <contentRectangle>
-                <div class="flex flex-col">
-                    <input
+            <contentRectangle class="rectangle">
+                <div class="flex flex-col mt-6">
+                    <input class="input_login"
                         type="text"
-                        style="margin-bottom: 10px; width:300px ; height: 30px; text-align: center"
                         v-model="email"
                         placeholder="email"
                     />
-                    <input
+                    <input class="input_login"
                         type="password"
-                        style="margin-bottom: 10px; height: 30px; text-align: center"
                         v-model="password"
                         placeholder="password"
                     />
-                    <Button :button-text="buttonText2" class="" @click="login">
+                    <div class="button_div">
+                    <Button :button-text="buttonText2" class="button_login" @click="login">
                     </Button>
+                    </div>
                 </div>
                 <p class="login_text">
-                    Not a magical member yet? Click <a href="./register" class="login_link">here</a>
+                    Not a magical member yet? Click  <a href="./register" class="login_link">here</a>
                 </p>
             </contentRectangle>
         </div>
@@ -66,13 +65,41 @@ export default {
 
 <style>
 
+.input_login {
+    margin: 4% 0;
+    text-align: center;
+
+}
+
+.button_div {
+    margin: 10% 0;
+    display: flex;
+    justify-content: center;
+}
+
+
 .login_text {
     color: #D3A625;
     text-shadow: 0 0 40px rgba(37, 170, 225, 0.5);
-    font-size: 1.1rem;
+    font-size: 1.3rem;
+    margin: 3%;
+    text-align: center;
 }
 
 .login_link {
     font-weight: bold;
+}
+
+@media screen and (min-width: 330px) and (max-width:749px) {
+
+    .login_text {
+        font-size: 0.8rem;
+    }
+
+    .input_login {
+        margin: 4% 4%;
+
+    }
+
 }
 </style>

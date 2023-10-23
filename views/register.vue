@@ -2,16 +2,19 @@
     <div>
         <Navbar />
         <router-view />
-            <Banner />
-            <contentRectangle>
-                <div class="flex flex-col">
-    <input type="text" style="margin-bottom: 10px; width:300px ; height: 30px; text-align: center" v-model="username" placeholder="username">
-    <input type="text" style="margin-bottom: 10px; width:300px ; height: 30px; text-align: center" v-model="email" placeholder="email">
-    <input type="password" style=" width:300px ; height: 30px; text-align: center" v-model="password" placeholder="password">
-                    <Button :button-text="buttonText3" class="" @click="register">
+        <div class="whole_content">
+            <contentRectangle class="content_rectangle">
+                <div class="flex flex-col w-4">
+    <input class="input_register" type="text" v-model="username" placeholder="username">
+    <input class="input_register" type="text" v-model="email" placeholder="email">
+    <input class="input_register" type="password" v-model="password" placeholder="password">
+                    <div class="button_div">
+                    <Button :button-text="buttonText3" class="button_login" @click="register">
                     </Button>
+                    </div>
                 </div>
             </contentRectangle>
+        </div>
         </div>
 </template>
 
@@ -59,3 +62,22 @@ export default {
         },
 };
 </script>
+
+<style>
+.input_register {
+    margin: 4% 30px;
+    text-align: center;
+
+}
+
+.button_div {
+    margin: 10% 0;
+    display: flex;
+    justify-content: center;
+}
+
+.flex flex-col {
+    margin: 0 40%;
+}
+
+</style>

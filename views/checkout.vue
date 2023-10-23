@@ -2,49 +2,44 @@
     <div>
         <navbar />
         <router-view />
-        <Banner />
         <contentRectangle>
             <div class="flex flex-col">
-                <input
+                <input class="checkout_input"
                         type="text"
-                        style="margin-bottom: 10px; margin-top: 30px; width:300px ; height: 30px; text-align: center"
                         v-model="street"
                         placeholder="Street and Number"
                 />
-                <input
+                <input class="checkout_input"
                         type="text"
-                        style="margin-bottom: 10px; width:300px ; height: 30px; text-align: center"
                         v-model="city"
                         placeholder="City"
                 />
-                <input
+                <input class="checkout_input"
                         type="text"
-                        style="margin-bottom: 10px; width:300px ; height: 30px; text-align: center"
                         v-model="state"
                         placeholder="State"
                 />
-                <input
+                <input class="checkout_input"
                         type="text"
-                        style="margin-bottom: 10px; width:300px ; height: 30px; text-align: center"
                         v-model="zipCode"
                         placeholder="Zip Code"
                 />
-                <input
+                <input class="checkout_input"
                         type="text"
-                        style="margin-bottom: 10px; width:300px ; height: 30px; text-align: center"
                         v-model="country"
                         placeholder="Country"
                 />
-                <select
-                        style="margin-bottom: 10px; width:300px ; height: 30px; text-align: center"
+                <select class="payment_input"
                         v-model="paymentMethod"
                 >
                     <option disabled value="">Please select a payment method</option>
                     <option>Credit Card</option>
                     <option>PayPal</option>
                 </select>
-                <Button :button-text="buttonText9" class="" @click="checkout">
+                <div class="button_div">
+                <Button :button-text="buttonText9" class="button_login" @click="checkout">
                 </Button>
+                </div>
             </div>
             <p class="checkout_text">
             </p>
@@ -89,13 +84,28 @@ export default {
 
 <style>
 
+
+.checkout_input {
+    margin: 2% auto;
+}
+
+.payment_input {
+    margin: 2% 15%;
+}
+
 .checkout_text {
     color: #D3A625;
     text-shadow: 0 0 40px rgba(37, 170, 225, 0.5);
     font-size: 1.1rem;
 }
 
+.button_div {
+    display: flex;
+    justify-content: center;
+}
 
-
+.button_div {
+    margin: 5% 0;
+}
 
 </style>

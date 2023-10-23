@@ -2,9 +2,8 @@
     <div>
         <navbar class="relative z-30" />
         <router-view />
-            <Banner />
-            <div class="member-container-wrapper absolute w-full top-10">
-        <div v-if="member">
+            <div class="member-container-wrapper">
+        <div class="member" v-if="member">
             <img :src="getImageSource(member.image)" class="member-image" :alt="member.username" />
             <h2 class="member_username"> {{ member.username }}</h2>
             <p class="member_email"> {{ member.email }}</p>
@@ -59,21 +58,21 @@ export default {
 <style>
 
 .member-image {
-    width: 400px;
-    height: 400px;
-    margin-top: 40%;
+    width: 60%;
     filter: drop-shadow(0px 10px 40px rgba(103, 128, 156, 1));
     border-radius: 4%;
+    align-self: center;
+    margin: 0 18%;
 }
 
 .member-container-wrapper {
-    position: absolute;
     width: 100%;
-    top: 8%;
     display: flex;
     justify-content: center;
+    margin: 3% auto;
 
 }
+
 
 .member_username {
     color: #D3A625;
@@ -87,6 +86,14 @@ export default {
     text-align: center;
     font-size: 1.2rem;
 }
+
+@media screen and (min-width: 330px) and (max-width:749px) {
+
+    .member_username, .member_email {
+        font-size: 0.8rem;
+    }
+}
+
 </style>
 
 

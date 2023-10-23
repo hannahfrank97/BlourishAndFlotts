@@ -23,7 +23,7 @@ function getMember(req, res, next) {
         membersModel.getMember(id)
     ])
 
-        .then(([member, profilePicture]) => {
+        .then(([member]) => {
             if (!member) {
                 res.status(404);
                 throw new Error(' not found');
@@ -36,7 +36,6 @@ function getMember(req, res, next) {
         });
 }
 function registerMember(req, res, next) {
-    const imagePath = '/images/logo.png';
     console.log("New member is being registered");
     console.log('req.body', req.body);
     membersModel.registerMember(req.body)
@@ -60,8 +59,6 @@ function getUserData(req, res, next) {
             if (!user) {
                 return res.status(404).json({ error: 'User not found' });
             }
-
-            // Filter out sensitive data
             const { password, ...userData } = user;
 
             res.json(userData);

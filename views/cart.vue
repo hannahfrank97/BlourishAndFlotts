@@ -2,9 +2,7 @@
     <div>
         <router-view />
         <navbar />
-            <Banner style="height: 400vh;" />
-
-            <div class="member-container-wrapper absolute w-full top-10">
+            <div class="member-container-wrapper">
                 <div class="item-container">
                     <h1 class="total_price">Total Price: {{ formatPrice(totalPrice) }}</h1>
                     <div v-for="item in cart" :key="item.bookId" class="cart_item">
@@ -14,7 +12,9 @@
                         <h3 class="item_price">{{ formatPrice(item.price * item.amount) }}</h3>
                         <redButton :button-text7="buttonText7" @click="deleteFromCart(item.bookId)"/>
                     </div>
-                    <cartButton :button-text="buttonText5" @click="buyItems"/>
+                    <div class="button_div">
+                    <cartButton class="cartButton" :button-text="buttonText5" @click="buyItems"/>
+                    </div>
 
                 </div>
 
@@ -81,7 +81,6 @@ export default {
             axios.create({ withCredentials: true })
                 .post(import.meta.env.VITE_APP_API_BASE_URL + '/api/cart/delete', { bookId: itemID})
                 .then(response => {
-                    console.log('ist gelöscht')
                     this.$toast.warning('The item was removed successfully from your cart.', { duration: 3000 });
                     setTimeout(this.$toast.clear, 3000);
                     window.location.assign(window.location.href);
@@ -125,10 +124,15 @@ export default {
 </script>
 
 <style>
+
+.button_div {
+    display: flex;
+    justify-content: center;
+    margin-top: 5%;
+}
 .member-container-wrapper {
-    position: absolute;
     width: 100%;
-    top: 0;
+    margin: 0;
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
@@ -138,7 +142,6 @@ export default {
     color: #D3A625;
     font-size: 1.4rem;
     text-align: center;
-    margin-top: 3%;
 }
 
 .item_amount {
@@ -155,29 +158,43 @@ export default {
 
 .item_images {
     filter: drop-shadow(0px 10px 40px rgba(103, 128, 156, 1));
-    height: 300px;
+    width: 50%;
+    height: auto;
 }
 
 .total_price {
-    margin-top: 1%;
     color: #D3A625;
-    font-size: 2.5rem;
+    font-size: 2rem;
+    white-space: nowrap;
+    align-self: center;
 }
 
 .item-container {
+    display: flex;
     flex-direction: column;
     justify-content: center;
-    margin-top: 15%;
     max-width: 80%;
-    margin-left: 5%;
+    margin-top: 3%;
 }
 
 .cart_item {
-    flex: 1 0 calc(33.3333% - 100px); /* flex-grow flex-shrink flex-basis */
-    margin: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
+    margin: 2% auto;
+}
+
+@media screen and (min-width: 330px) and (max-width:749px) {
+
+    .item-container {
+        margin: 2%;
+
+
+    }
+    .total_price {
+        font-size: 1.3rem;
+    }
 }
 
 </style>

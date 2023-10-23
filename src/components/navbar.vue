@@ -110,12 +110,12 @@ export default {
 
 .navbar {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     align-items: center;
-    gap: 0;
+    gap: 10%;
     background: #131862;
     color: white;
-    height: 150px;
+    height: 10rem;
     padding: 0 1rem;
     list-style-type: none;
 }
@@ -130,9 +130,81 @@ export default {
 
 }
 
-.navbar-link {
-    margin-left: 6rem;
+@media screen and (min-width: 330px) and (max-width: 622px) {
+    .navbar-link {
+        margin-left: 2%;
+        margin-top: 28%;
+        text-align: center;
+    }
+
+    .navbar-container {
+        width: 80%;
+        font-size: 0.5rem;
+    }
+
+    .logo-container {
+        width: 27%;
+        height: auto;
+        margin: 0 12%;
+
+    }
+}
+
+@media screen and (min-width: 623px) and (max-width: 768px) {
+    .navbar {
+        justify-content: flex-end;
+        gap: 8%;
+    }
+
+    .navbar-container {
+        width: 80%;
+        font-size: 0.6rem;
+
+    }
+
+    .logo-container {
+        width: 23%;
+        height: auto;
+        margin: 0 3%;
+
+    }
+
 
 }
+
+@media screen and (min-width: 769px) and (max-width: 1024px)  {
+    .navbar {
+        gap: 8%;
+        justify-content: right;
+    }
+
+    .navbar-container {
+        width: 80%;
+        font-size: 0.7rem;
+    }
+
+    .logo-container {
+        width: 36%;
+        height: auto;
+        margin: 0 12%;
+
+    }
+
+
+
+}
+
+@media screen and (min-width: 1025px) {
+    .navbar {
+        gap: 7%;
+        justify-content: center;
+    }
+
+    .navbar-container {
+        font-size: 1rem;
+    }
+}
+
+
 
 </style>

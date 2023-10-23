@@ -21,15 +21,14 @@ export default {
 
 <style>
 .custom-button {
-    margin: 10%;
     text-align: center;
     line-height: 1.5;
     font-size: 2rem;
 }
 
 .custom-button {
-    width: 250px;
-    height: 80px;
+    width: 14rem;
+    height: 4rem;
     color: #fff;
     cursor: pointer;
     text-align: center;
@@ -39,7 +38,7 @@ export default {
     transition: all 0.4s ease-in-out;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
 }
 
 .custom-button:hover {
@@ -60,6 +59,9 @@ export default {
 .button-text {
     display: inline-block;
     vertical-align: middle;
+}
+
+@media screen and (min-width: 330px) and (max-width:749px) {
 }
 </style>
 

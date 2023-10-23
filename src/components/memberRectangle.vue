@@ -56,10 +56,22 @@ export default {
 }
 
 .default-image {
-    width: 50%;
+    width: 40%;
     height: auto;
 
 
+}
+
+@media screen and (min-width: 330px) and (max-width:749px) {
+    .member_username, .member_email {
+        font-size: 0.8rem;
+    }
+}
+
+@media screen and (min-width: 750px) and (max-width:1200px) {
+    .member_username, .member_email {
+        font-size: 0.9rem;
+    }
 }
 
 </style>

@@ -56,7 +56,6 @@ let registerMember = (memberData) => new Promise(async (resolve, reject) => {
                 username: memberData.username,
                 email: memberData.email,
                 password: memberData.password,
-                imagePath: imagePath,
             };
             resolve(newMember);
         }
