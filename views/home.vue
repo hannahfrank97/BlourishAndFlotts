@@ -6,7 +6,7 @@
                 <h1 class="h1_banner">Your most inspiring magical magic book experience</h1>
             </div>
             <div class="image-container">
-                <img src="../src/images/bannerImage.png" alt="two books" class="banner_image">
+                <img src="../public/images/bannerImage.png" alt="two books" class="banner_image">
             </div>
         </div>
         <router-link to="/shop">
