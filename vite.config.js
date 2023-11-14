@@ -7,7 +7,7 @@ import WindiCSS from 'vite-plugin-windicss'
 export default defineConfig({
   plugins: [vue(), WindiCSS()],
   server: {
-    port:80
+    port:8082
   },
   /*server: {
     host: '0.0.0.0',
