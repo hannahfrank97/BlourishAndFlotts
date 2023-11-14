@@ -26,7 +26,7 @@ export default {
     },
     methods: {
         getImageSource(imageName) {
-            return '/src/images/' + imageName;
+            return '/images/' + imageName;
         },
     },
 };

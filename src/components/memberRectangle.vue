@@ -14,9 +14,9 @@ export default {
     methods: {
         getImageSource(imageName) {
             if(imageName && imageName.trim() !== '') {
-                return '/src/images/' + imageName;
+                return '/images/' + imageName;
             } else {
-                return '/src/images/logo.png';
+                return '/images/logo.png';
             }
         },
 
