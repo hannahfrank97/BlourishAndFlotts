@@ -2,7 +2,7 @@
 
     <div class="navbar-container">
         <div class="logo-container">
-            <a href="/" class="logo-link">
+            <a href="/blourish-and-flotts" class="logo-link">
             <img src="/images/logo.png" alt="Logo" class="logo">
             </a>
         </div>
@@ -21,7 +21,7 @@
                 <router-link to="/login">Login</router-link>
             </li>
             <li class="navbar-link" v-else>
-                <a @click="logout">Logout</a>
+                <a @click="logout" class="logout-link">Logout</a>
             </li>
         </ul>
 
@@ -77,6 +77,9 @@ export default {
 </script>
 
 <style>
+.logout-link {
+    cursor: pointer;
+}
 .navbar-container {
     font-family: 'Inter', sans-serif;
     letter-spacing: 2px;

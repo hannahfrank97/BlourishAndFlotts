@@ -50,10 +50,18 @@ export default {
                     password: this.password,
                 }, {withCredentials: true});
 
-                this.$router.push('/');
+                this.$router.push('/')
+                .then (() => {
+                this.$toast.success('Login successfull!', { duration: 3000 });
+                setTimeout(this.$toast.clear, 3000);
+                })
+                
 
             } catch (error) {
-                console.error(error);
+                console.error(error)
+                this.$toast.error('Wrong username or password!', { duration: 3000 });
+                setTimeout(this.$toast.clear, 3000);
+                
             }
         },
 

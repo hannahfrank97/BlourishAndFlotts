@@ -29,7 +29,7 @@ async function authenticateMember({email, password}, members, res) {
         res.status(200).json({'success': 'jwt was created'});
         return accessToken;
     } else {
-        throw new Error('Email or password incorrect');
+        res.status(401).json({'error': 'wrong username or password'});
     }
 }
 

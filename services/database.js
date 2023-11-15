@@ -3,7 +3,7 @@ const mysql = require('mysql2');
 
 function createDbConnection() {
     return mysql.createConnection({
-        host: "mysql",
+        host: "bookstore-mysql",
         port: '3306',
         user: process.env.MYSQL_USER,
         password: process.env.MYSQL_PASSWORD,

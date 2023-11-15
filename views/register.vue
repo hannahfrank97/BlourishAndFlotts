@@ -54,7 +54,12 @@ export default {
 
                 await this.getUserData();
 
-                this.$router.push('/');
+                this.$router.push('/login')
+                .then (() => {
+                this.$toast.success('Registered successfully!', { duration: 3000 });
+                setTimeout(this.$toast.clear, 3000);
+                })
+                
             } catch (error) {
                 console.error(error);
             }

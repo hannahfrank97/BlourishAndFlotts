@@ -26,7 +26,7 @@ export default {
     },
     methods: {
         getImageSource(imageName) {
-            return '/images/' + imageName;
+            return '/blourish-and-flotts/images/' + imageName;
         },
     },
 };

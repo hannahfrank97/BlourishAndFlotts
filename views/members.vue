@@ -44,14 +44,24 @@ export default {
         };
     },
     mounted() {
+        this.checkLoggedIn();
         this.fetchMembers();
     },
     methods: {
+        checkLoggedIn() {
+            axios.get(import.meta.env.VITE_APP_API_BASE_URL + '/isLoggedIn', { withCredentials: true })
+                .then(response => {
+                    this.isLoggedIn = response.data.loggedIn;
+                })
+                .catch(error => console.error('Error checking logged in status:', error));
+        },
+
         fetchMembers() {
-            axios.create({ withCredentials: true }).get(import.meta.env.VITE_APP_API_BASE_URL + '/api/members')
+            axios.create({ withCredentials: true })
+                 .get(import.meta.env.VITE_APP_API_BASE_URL + '/api/members')
                 .then(response => {
                     this.members = response.data.members;
-                    this.isLoggedIn = this.members.length > 0;
+                    this.isLoggedIn = response.data.isLoggedIn;
                 })
                 .catch(error => console.error(error));
         },

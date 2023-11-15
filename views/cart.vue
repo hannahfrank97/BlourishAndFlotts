@@ -2,7 +2,12 @@
     <div>
         <router-view />
         <navbar />
-            <div class="member-container-wrapper">
+            <div class="container_p">
+                <p class="loggedin_text" v-if="!isLoggedIn">
+                    Please <a href="./login">login</a> or <a href="./register">register</a> to see our magical shop!
+                </p>
+            </div>
+            <div class="member-container-wrapper" v-if="isLoggedIn">
                 <div class="item-container">
                     <h1 class="total_price">Total Price: {{ formatPrice(totalPrice) }}</h1>
                     <div v-for="item in cart" :key="item.bookId" class="cart_item">
@@ -28,8 +33,14 @@ import Navbar from "@/components/navbar.vue";
 import Banner from "@/components/banner.vue";
 import CartButton from "@/components/cartButton.vue";
 import redButton from "@/components/redButton.vue";
+import login from "./login.vue";
 
 export default {
+    computed: {
+        login() {
+            return login
+        }
+    },
     components: {CartButton, Banner, Navbar, redButton},
     data() {
         return {
@@ -38,14 +49,24 @@ export default {
             members: [],
             buttonText5: 'Buy',
             buttonText7: 'Delete me',
+            isLoggedIn: false,
         };
     },
     mounted() {
+        this.checkLoggedIn();
         this.fetchCart();
     },
     methods: {
         getImageSource(imageName) {
-            return '/images/' + imageName;
+            return '/blourish-and-flotts/images/' + imageName;
+        },
+        
+        checkLoggedIn() {
+            axios.get(import.meta.env.VITE_APP_API_BASE_URL + '/isLoggedIn', { withCredentials: true })
+                .then(response => {
+                    this.isLoggedIn = response.data.loggedIn;
+                })
+                .catch(error => console.error('Error checking logged in status:', error));
         },
 
         fetchCart() {
@@ -54,6 +75,7 @@ export default {
                 .then(response => {
                     this.cart = response.data.cartData;
                     console.log(response.data.cartData)
+                
                 })
                 .catch(error => console.error(error));
         },
@@ -136,6 +158,19 @@ export default {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
+}
+
+.container_p {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.loggedin_text {
+    color: #D3A625;
+    text-shadow: 0 0 40px rgba(37, 170, 225, 0.5);
+    font-size: 1.1rem;
+    align-items: center;
 }
 
 .item_title {
