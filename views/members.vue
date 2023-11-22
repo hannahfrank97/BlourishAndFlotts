@@ -104,6 +104,12 @@ export default {
         flex: 1 0 20%;
         margin: 2.5em;
     }
+
+    .loggedin_text {
+        font-size: 0.8rem;
+
+    }
+
 }
 
 @media screen and (min-width: 750px) and (max-width:1200px) {
