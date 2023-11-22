@@ -5,7 +5,6 @@ const fs = require("fs");
 const bcrypt = require('bcrypt')
 
 function getMembers(req, res, next) {
-    console.log('i am getting the members')
     membersModel.getMembers()
         .then((members) => {
             res.json({ members })
@@ -17,7 +16,6 @@ function getMembers(req, res, next) {
 
 function getMember(req, res, next) {
     const id = req.params.id;
-    console.log(req.params.id)
     const authenticatedUser = req.user;
     Promise.all([
         membersModel.getMember(id)
@@ -37,10 +35,8 @@ function getMember(req, res, next) {
 }
 function registerMember(req, res, next) {
     console.log("New member is being registered");
-    console.log('req.body', req.body);
     membersModel.registerMember(req.body)
         .then((member) => {
-            console.log('Registered member:', member);
             res.json({ member });
         })
         .catch(error => {

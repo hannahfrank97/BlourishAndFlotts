@@ -33,7 +33,6 @@ let getMember = (id) => new Promise((resolve, reject) => {
 })
 
 let registerMember = (memberData) => new Promise(async (resolve, reject) => {
-    console.log('memberData', memberData);
     memberData.password = await bcrypt.hash(memberData.password, 10);
 
     let imagePath = "/images/logo.png";

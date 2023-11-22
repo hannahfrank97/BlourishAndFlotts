@@ -31,13 +31,11 @@ export default {
     },
     methods: {
         fetchMember() {
-            console.log(this.$route.params.memberId);
             let memberID = this.$route.params.memberId
             axios
                 .create({ withCredentials: true })
                 .get(`${import.meta.env.VITE_APP_API_BASE_URL}/api/members/${memberID}`)
                 .then((response) => {
-                    console.log(response.data.member);
                     this.member = response.data.member;
                 })
                 .catch((error) => console.error(error));

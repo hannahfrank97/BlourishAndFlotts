@@ -5,10 +5,7 @@ const cartModel = require('../models/cartModel');
 const cartController = require('../controllers/cartController');
 
 async function checkPassword(password, hash) {
-    console.log(hash);
-    console.log(password);
     let pw = await bcrypt.compare(password, hash)
-    console.log(pw)
     return pw;
 }
 
@@ -18,7 +15,6 @@ async function authenticateMember({email, password}, members, res) {
         return u.email === email
     });
 
-    console.log(email, password);
     if (member && await checkPassword(password, member.password)) {
         console.log('Username and Password correct')
         const accessToken = jwt.sign({id: member.id, name: member.username, email}, ACCESS_TOKEN_SECRET);
@@ -66,7 +62,6 @@ function getLoggedMember(req, res, next) {
         loggedMember.img = res.locals.loggedMember.img || null;
     }
 
-    console.log(loggedMember.id);
     next();
 }
 

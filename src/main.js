@@ -7,7 +7,6 @@ import 'tailwindcss/tailwind.css'
 import '@/stylesheets/styles.css';
 
 const apiUrl = import.meta.env.VITE_APP_API_BASE_URL;
-console.log(apiUrl);
 
 const app = createApp(App);
 

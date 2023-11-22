@@ -17,11 +17,39 @@ app.use(morgan('combined', { stream: accessLogStream }))
 // write short logs into the console
 app.use(morgan('short'))
 
+// app.use((req, res, next) => {
+//     res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self' https://hannahfrank.at https://www.hannahfrank.at");
+//     return next();
+// });
+
+const allowedOrigins = [
+    'https://www.hannahfrank.at/blourish-and-flotts',
+    'https://hannahfrank.at/blourish-and-flotts',
+    'https://www.hannahfrank.at',
+    'https://hannahfrank.at'
+    // add other origins here if necessary
+  ];
+
 app.use(cors({
-    /*origin: 'https://cc221009-10130.node.fhstp.io',*/
-    origin: 'http://localhost/blourish-and-flotts',
+    origin: function (origin, callback) {
+      // allow requests with no origin (like mobile apps, curl, etc.)
+      if (!origin) return callback(null, true);
+  
+      // check if the origin is one of the allowed origins
+      if (allowedOrigins.indexOf(origin) === -1) {
+        var msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+        return callback(new Error(msg), false);
+      }
+      return callback(null, true);
+    },
     credentials: true
-}));
+  }));
+
+// app.use(cors({
+//     /*origin: 'https://cc221009-10130.node.fhstp.io',*/
+//    origin: 'https://hannahfrank.at/blourish-and-flotts',
+//    credentials: true
+// }));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

@@ -5,7 +5,6 @@ function getMemberCart(req, res, next) {
 
     cartModel.getMemberCart(memberId)
         .then((cartData) => {
-            console.log(cartData)
             res.json({ cartData })
         })
         .catch((err) => {
@@ -15,7 +14,6 @@ function getMemberCart(req, res, next) {
 }
 
 function addToCart(req, res, next) {
-    console.log('i am inside the addtocart');
     const memberId = req.member.id;
     const bookId = req.body.bookId;
 

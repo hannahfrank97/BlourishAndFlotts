@@ -57,7 +57,6 @@ export default {
                 .then(response => {
                     this.$toast.success('You successfully added the book to your cart!', { duration: 3000 });
                     setTimeout(this.$toast.clear, 3000)
-                    console.log(response.data);
                 })
                 .catch(error => {
                     console.error(error);

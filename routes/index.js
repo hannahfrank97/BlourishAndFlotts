@@ -16,7 +16,6 @@ router.route('/login')
     .get((req, res, next) => res.status(401).json({'error':'wrong http request','message':'please use a post request'}))
     .post((req, res, next) => {
         const {email, password} = req.body;
-        console.log("User",email,"trying to login with", password);
         if(email && password) {
             membersModel.getMemberByMail(email)
                 .then((member) => {
