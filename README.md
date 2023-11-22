@@ -1,29 +1,20 @@
-# ccl2_frank
+# Blourish and Flotts
+## A Magical Webshop for Books
 
-This template should help get you started developing with Vue 3 in Vite.
+Welcome to Blourish and Flotts, a magical destination for book enthusiasts. Our webshop features a wide range of magical books.
 
-## Recommended IDE Setup
+### Development Information
+This website is developed using Vue.js for the frontend and Node.js for the backend. 
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+### Project Setup
 
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
+#### Running the Project
+To run the project locally, use the docker-compose.yaml file.
+Navigate to the root directory and simply:
 ```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
+docker-compose up -d
 ```
+Happy Magical Shopping!
 
-### Compile and Minify for Production
+Hannah
 
-```sh
-npm run build
-```
