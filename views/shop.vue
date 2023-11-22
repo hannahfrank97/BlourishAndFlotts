@@ -59,6 +59,8 @@ export default {
                     setTimeout(this.$toast.clear, 3000)
                 })
                 .catch(error => {
+                    this.$toast.warning('Be sure to log in to add our magical books to the cart!', { duration: 3000 });
+                    setTimeout(this.$toast.clear, 3000);
                     console.error(error);
                 });
         },

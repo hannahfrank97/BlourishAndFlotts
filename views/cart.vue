@@ -73,6 +73,8 @@ export default {
                     this.$router.push('/cart/buy');
                 })
                 .catch((error) => {
+                    this.$toast.warning('Be sure to log in to buy our magical books!', { duration: 3000 });
+                    setTimeout(this.$toast.clear, 3000);
                     console.error(error);
                 });
         },
