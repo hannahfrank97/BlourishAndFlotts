@@ -3,9 +3,6 @@
         <navbar />
         <router-view />
         <div class="container_p">
-            <p class="loggedin_text" v-if="!isLoggedIn">
-                Please <a href="./login">login</a> or <a href="./register">register</a> to see our magical shop!
-            </p>
         </div>
         <div class="whole_content">
                 <Banner style="height: 0vh;"/>
