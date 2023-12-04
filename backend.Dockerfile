@@ -1,3 +1,16 @@
+FROM node:latest as build-stage
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+
+RUN npm run build
+
+
+# actual backend
 FROM node:latest
 
 # make the 'app' folder the current working directory
@@ -11,6 +24,8 @@ RUN npm install
 
 # copy project files and folders to the current working directory (i.e. 'app' folder)
 COPY . .
+
+COPY --from=build-stage /app/dist ./dist
 
 EXPOSE 3000
 CMD [ "node", "app.js"]

@@ -1,9 +1,14 @@
-const db = require('../services/database').config;
+const { getConnection, releaseConnection } = require('../services/database');
 const bcrypt = require('bcrypt');
 
 //receiving the cart details of a specific member
 let getMemberCart = (memberId) => new Promise((resolve, reject) => {
-    const query = `
+    getConnection((err, db) => {
+        if (err) {
+            return reject(err);
+        }
+
+        const query = `
         SELECT 
             members.id AS memberId, members.username, members.email,
             cart.id AS cartId, booksList.image,
@@ -23,23 +28,31 @@ let getMemberCart = (memberId) => new Promise((resolve, reject) => {
             GROUP BY items.cart_id, books.id
         ) AS booksList ON booksList.cart_id = cart.id
         WHERE members.id = ?
-    `;
+         `;
 
-    db.query(query, [memberId], function (err, cartData) {
-        if (err) {
-            reject(err);
-        } else {
-            resolve(cartData);
-        }
+        db.query(query, [memberId], function (err, cartData) {
+            releaseConnection(db); // Release the connection
+
+            if (err) {
+                reject(err);
+            } else {
+                resolve(cartData);
+            }
+        });
     });
 });
 
 //adding the book to the member´s cart and checking if the members´s cart already exists
-let addToCart = (memberId, bookId) => {
-    return new Promise((resolve, reject) => {
+let addToCart = (memberId, bookId) => new Promise((resolve, reject) => {
+    getConnection((err, db) => {
+        if (err) {
+            return reject(err);
+        }
+
         const getCartIdQuery = "SELECT id FROM cart WHERE members_id = ?";
         db.query(getCartIdQuery, [memberId], function (err, cartResult) {
             if (err) {
+                releaseConnection(db); // Release the connection
                 reject(err);
                 return;
             }
@@ -47,25 +60,30 @@ let addToCart = (memberId, bookId) => {
             let cartId;
             if (cartResult.length > 0) {
                 cartId = cartResult[0].id;
-                insertOrUpdateItem(cartId, bookId, resolve, reject);
+                insertOrUpdateItem(db, cartId, bookId, resolve, reject);
             } else {
                 const createCartQuery = "INSERT INTO cart (members_id) VALUES (?)";
                 db.query(createCartQuery, [memberId], function (err, createResult) {
                     if (err) {
+                        releaseConnection(db); // Release the connection
                         reject(err);
                         return;
                     }
 
                     cartId = createResult.insertId;
-                    insertOrUpdateItem(cartId, bookId, resolve, reject);
+                    insertOrUpdateItem(db, cartId, bookId, resolve, reject);
                 });
             }
         });
     });
-};
+});
 
-let removeItemFromCart = (memberId, bookId) => {
-    return new Promise((resolve, reject) => {
+let removeItemFromCart = (memberId, bookId) => new Promise((resolve, reject) => {
+    getConnection((err, db) => {
+        if (err) {
+            return reject(err);
+        }
+
         const getCartIdQuery = "SELECT id FROM cart WHERE members_id = ?";
         db.query(getCartIdQuery, [memberId], function (err, cartResult) {
             if (err) {
@@ -125,9 +143,10 @@ let removeItemFromCart = (memberId, bookId) => {
             } else {
                 resolve({ message: "Cart not found." });
             }
+            releaseConnection(db); // Release the connection at the end of the entire logic
         });
     });
-};
+});
 
 //inserting the item into a member´s new cart or and updating the item´s amount if the cart already exists
 function insertOrUpdateItem(cartId, bookId, resolve, reject) {
@@ -164,28 +183,41 @@ function insertOrUpdateItem(cartId, bookId, resolve, reject) {
 //deleting a member´s cart
 function clearCartForMember(memberId) {
     return new Promise((resolve, reject) => {
-        const clearCartQuery = 'DELETE FROM cart WHERE members_id = ?';
-        db.query(clearCartQuery, [memberId], function (err, result) {
+        getConnection((err, db) => {
             if (err) {
-                reject(err);
-            } else {
-                resolve();
+                return reject(err);
             }
+
+            const clearCartQuery = 'DELETE FROM cart WHERE members_id = ?';
+            db.query(clearCartQuery, [memberId], function (err, result) {
+                releaseConnection(db); // Release the connection
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve();
+                }
+            });
         });
     });
 }
 
 //items get marked as Bought within the database if the member clicks un "Buy"
 function markAllItemsAsBought(cartId) {
-    const query = 'UPDATE items SET isBought = 1 WHERE cart_id = ?';
-
     return new Promise((resolve, reject) => {
-        db.query(query, [cartId], function (err, result) {
+        getConnection((err, db) => {
             if (err) {
-                reject(err);
-            } else {
-                resolve();
+                return reject(err);
             }
+
+            const query = 'UPDATE items SET isBought = 1 WHERE cart_id = ?';
+            db.query(query, [cartId], function (err, result) {
+                releaseConnection(db); // Release the connection
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve();
+                }
+            });
         });
     });
 }
