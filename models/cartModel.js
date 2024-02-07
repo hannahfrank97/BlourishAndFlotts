@@ -149,7 +149,7 @@ let removeItemFromCart = (memberId, bookId) => new Promise((resolve, reject) => 
 });
 
 //inserting the item into a member´s new cart or and updating the item´s amount if the cart already exists
-function insertOrUpdateItem(cartId, bookId, resolve, reject) {
+function insertOrUpdateItem(db, cartId, bookId, resolve, reject) {
     const checkBookQuery = "SELECT * FROM items WHERE cart_id = ? AND books_id = ?";
     db.query(checkBookQuery, [cartId, bookId], function (err, result) {
         if (err) {
@@ -168,7 +168,6 @@ function insertOrUpdateItem(cartId, bookId, resolve, reject) {
             });
         } else {
             const addItemQuery = "INSERT INTO items (cart_id, books_id, amount, isBought) VALUES (?, ?, 1, 0)";
-
             db.query(addItemQuery, [cartId, bookId], function (err) {
                 if (err) {
                     reject(err);
@@ -179,6 +178,7 @@ function insertOrUpdateItem(cartId, bookId, resolve, reject) {
         }
     });
 }
+
 
 //deleting a member´s cart
 function clearCartForMember(memberId) {

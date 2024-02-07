@@ -64,7 +64,7 @@ export default {
 
 @media screen and (min-width: 330px) and (max-width:749px) {
     .member_username, .member_email {
-        font-size: 0.8rem;
+        font-size: 0.4rem;
     }
 }
 
