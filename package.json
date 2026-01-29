@@ -6,6 +6,7 @@
     "start": "node app.js",
     "dev": "vite",
     "build": "vite build --base=/blourish-and-flotts/",
+    "build:prod": "vite build --base=/",
     "preview": "vite preview"
   },
   "dependencies": {
