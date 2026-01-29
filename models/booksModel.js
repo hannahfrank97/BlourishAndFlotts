@@ -1,24 +1,9 @@
-const { getConnection, releaseConnection } = require('../services/database');
-const bcrypt = require('bcrypt');
+const { pool } = require('../services/database');
 
-let getBooks = () => new Promise((resolve, reject) => {
-    getConnection((err, db) => {
-        if (err) {
-            return reject(err);
-        }
-
-        db.query("SELECT * FROM books", function (err, books, fields) {
-            // Release the connection back to the pool
-            releaseConnection(db);
-
-            if (err) {
-                reject(err);
-            } else {
-                resolve(books);
-            }
-        });
-    });
-});
+let getBooks = async () => {
+    const result = await pool.query("SELECT * FROM books");
+    return result.rows;
+};
 
 module.exports = {
     getBooks,

@@ -1,36 +1,18 @@
 require('dotenv').config();
-const mysql = require('mysql2');
+const { Pool } = require('pg');
 
-// Create a pool of connections
-const pool = mysql.createPool({
-    connectionLimit: 10, // Maximum number of connections in pool
-    host: "bookstore-mysql",
-    port: '3306',
-    user: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASSWORD,
-    database: process.env.DB_NAME,
-    waitForConnections: true,
-    queueLimit: 20
+// Create a pool using DATABASE_URL (standard for Render/Neon)
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+    max: 10,
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 2000,
 });
 
-// Function to get a connection from the pool
-function getConnection(callback) {
-    pool.getConnection((err, connection) => {
-        if (err) {
-            console.error('Error getting database connection from pool', err);
-            return callback(err, null);
-        }
-        callback(null, connection);
-    });
-}
+// Log connection errors
+pool.on('error', (err) => {
+    console.error('Unexpected error on idle client', err);
+});
 
-// Function to release a connection back to the pool
-function releaseConnection(connection) {
-    if (connection) connection.release();
-}
-
-// Export getConnection and releaseConnection for use in your application
-module.exports = {
-    getConnection,
-    releaseConnection
-};
+module.exports = { pool };

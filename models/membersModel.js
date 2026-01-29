@@ -1,115 +1,43 @@
-const { getConnection, releaseConnection } = require('../services/database');
+const { pool } = require('../services/database');
 const bcrypt = require('bcrypt');
 
-let getMembers = () => new Promise((resolve, reject) => {
-    getConnection((err, db) => {
-        if (err) {
-            return reject(err);
-        }
+let getMembers = async () => {
+    const result = await pool.query("SELECT * FROM members");
+    return result.rows;
+};
 
-        db.query("SELECT * FROM members", function (err, members) {
-            releaseConnection(db);
+let getMemberByMail = async (mail) => {
+    const result = await pool.query("SELECT * FROM members WHERE email = $1", [mail]);
+    return result.rows;
+};
 
-            if (err) {
-                reject(err);
-            } else {
-                resolve(members);
-            }
-        });
-    });
-});
+let getMember = async (id) => {
+    const result = await pool.query("SELECT * FROM members WHERE id = $1", [id]);
+    return result.rows[0];
+};
 
-
-let getMemberByMail = (mail) => new Promise((resolve, reject) => {
-    getConnection((err, db) => {
-        if (err) {
-            return reject(err);
-        }
-
-        db.query("SELECT * FROM members WHERE email = " + db.escape(mail), function (err, members) {
-            releaseConnection(db);
-
-            if (err) {
-                reject(err);
-            } else {
-                resolve(members);
-            }
-        });
-    });
-});
-
-
-let getMember = (id) => new Promise((resolve, reject) => {
-    getConnection((err, db) => {
-        if (err) {
-            return reject(err);
-        }
-
-        db.query("SELECT * FROM members WHERE id = " + db.escape(id), function (err, member) {
-            releaseConnection(db);
-
-            if (err) {
-                reject(err);
-            } else {
-                resolve(member[0]);
-            }
-        });
-    });
-});
-
-let registerMember = (memberData) => new Promise(async (resolve, reject) => {
+let registerMember = async (memberData) => {
     memberData.password = await bcrypt.hash(memberData.password, 10);
 
-    getConnection((err, db) => {
-        if (err) {
-            return reject(err);
-        }
+    const result = await pool.query(
+        "INSERT INTO members (username, email, password) VALUES ($1, $2, $3) RETURNING id",
+        [memberData.username, memberData.email, memberData.password]
+    );
 
-        let sql = "INSERT INTO members (username, email, password) VALUES (" +
-            db.escape(memberData.username) + ", " +
-            db.escape(memberData.email) + ", " +
-            db.escape(memberData.password) + ")";
+    const newMember = {
+        id: result.rows[0].id,
+        username: memberData.username,
+        email: memberData.email,
+        password: memberData.password,
+    };
+    return newMember;
+};
 
-        db.query(sql, function (err, result) {
-            releaseConnection(db);
-
-            if (err) {
-                reject(err);
-            } else {
-                const newMember = {
-                    id: result.insertId,
-                    username: memberData.username,
-                    email: memberData.email,
-                    password: memberData.password,
-                };
-                resolve(newMember);
-            }
-        });
-    });
-});
-
-
-
-let getMemberByToken = (token) => new Promise((resolve, reject) => {
-    getConnection((err, db) => {
-        if (err) {
-            return reject(err);
-        }
-
-        let userId = token;
-        db.query("SELECT * FROM members WHERE id = " + db.escape(userId), function (err, member) {
-            releaseConnection(db);
-
-            if (err) {
-                reject(err);
-            } else {
-                resolve(member[0]);
-            }
-        });
-    });
-});
-
-
+let getMemberByToken = async (token) => {
+    let userId = token;
+    const result = await pool.query("SELECT * FROM members WHERE id = $1", [userId]);
+    return result.rows[0];
+};
 
 module.exports = {
     getMembers,
@@ -117,4 +45,4 @@ module.exports = {
     registerMember,
     getMemberByMail,
     getMemberByToken,
-}
+};

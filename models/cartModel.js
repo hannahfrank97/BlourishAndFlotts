@@ -1,228 +1,114 @@
-const { getConnection, releaseConnection } = require('../services/database');
-const bcrypt = require('bcrypt');
+const { pool } = require('../services/database');
 
-//receiving the cart details of a specific member
-let getMemberCart = (memberId) => new Promise((resolve, reject) => {
-    getConnection((err, db) => {
-        if (err) {
-            return reject(err);
-        }
-
-        const query = `
-        SELECT 
-            members.id AS memberId, members.username, members.email,
-            cart.id AS cartId, booksList.image,
+// Receiving the cart details of a specific member
+let getMemberCart = async (memberId) => {
+    const query = `
+        SELECT
+            members.id AS "memberId", members.username, members.email,
+            cart.id AS "cartId", booksList.image,
             (
-                SELECT SUM(books.price * items.amount) 
-                FROM items 
+                SELECT SUM(books.price * items.amount)
+                FROM items
                 INNER JOIN books ON items.books_id = books.id
                 WHERE items.cart_id = cart.id
-            ) AS totalPrice,
-            booksList.bookId, booksList.title, booksList.price, booksList.amount
+            ) AS "totalPrice",
+            booksList."bookId", booksList.title, booksList.price, booksList.amount
         FROM cart
         INNER JOIN members ON cart.members_id = members.id
         INNER JOIN (
-            SELECT items.cart_id, books.id AS bookId, books.title, books.price, SUM(items.amount) AS amount, books.image
-            FROM items 
+            SELECT items.cart_id, books.id AS "bookId", books.title, books.price, SUM(items.amount) AS amount, books.image
+            FROM items
             INNER JOIN books ON items.books_id = books.id
-            GROUP BY items.cart_id, books.id
+            GROUP BY items.cart_id, books.id, books.title, books.price, books.image
         ) AS booksList ON booksList.cart_id = cart.id
-        WHERE members.id = ?
-         `;
+        WHERE members.id = $1
+    `;
+    const result = await pool.query(query, [memberId]);
+    return result.rows;
+};
 
-        db.query(query, [memberId], function (err, cartData) {
-            releaseConnection(db); // Release the connection
+// Adding the book to the member's cart and checking if the member's cart already exists
+let addToCart = async (memberId, bookId) => {
+    // Check if cart exists for member
+    const cartResult = await pool.query("SELECT id FROM cart WHERE members_id = $1", [memberId]);
 
-            if (err) {
-                reject(err);
-            } else {
-                resolve(cartData);
-            }
-        });
-    });
-});
+    let cartId;
+    if (cartResult.rows.length > 0) {
+        cartId = cartResult.rows[0].id;
+    } else {
+        // Create new cart
+        const createResult = await pool.query(
+            "INSERT INTO cart (members_id) VALUES ($1) RETURNING id",
+            [memberId]
+        );
+        cartId = createResult.rows[0].id;
+    }
 
-//adding the book to the member´s cart and checking if the members´s cart already exists
-let addToCart = (memberId, bookId) => new Promise((resolve, reject) => {
-    getConnection((err, db) => {
-        if (err) {
-            return reject(err);
-        }
+    // Check if book already in cart
+    const checkResult = await pool.query(
+        "SELECT * FROM items WHERE cart_id = $1 AND books_id = $2",
+        [cartId, bookId]
+    );
 
-        const getCartIdQuery = "SELECT id FROM cart WHERE members_id = ?";
-        db.query(getCartIdQuery, [memberId], function (err, cartResult) {
-            if (err) {
-                releaseConnection(db); // Release the connection
-                reject(err);
-                return;
-            }
+    if (checkResult.rows.length > 0) {
+        // Update amount
+        await pool.query(
+            "UPDATE items SET amount = amount + 1 WHERE cart_id = $1 AND books_id = $2",
+            [cartId, bookId]
+        );
+    } else {
+        // Insert new item
+        await pool.query(
+            "INSERT INTO items (cart_id, books_id, amount, \"isBought\") VALUES ($1, $2, 1, false)",
+            [cartId, bookId]
+        );
+    }
+};
 
-            let cartId;
-            if (cartResult.length > 0) {
-                cartId = cartResult[0].id;
-                insertOrUpdateItem(db, cartId, bookId, resolve, reject);
-            } else {
-                const createCartQuery = "INSERT INTO cart (members_id) VALUES (?)";
-                db.query(createCartQuery, [memberId], function (err, createResult) {
-                    if (err) {
-                        releaseConnection(db); // Release the connection
-                        reject(err);
-                        return;
-                    }
+let removeItemFromCart = async (memberId, bookId) => {
+    const cartResult = await pool.query("SELECT id FROM cart WHERE members_id = $1", [memberId]);
 
-                    cartId = createResult.insertId;
-                    insertOrUpdateItem(db, cartId, bookId, resolve, reject);
-                });
-            }
-        });
-    });
-});
+    if (cartResult.rows.length === 0) {
+        return { message: "Cart not found." };
+    }
 
-let removeItemFromCart = (memberId, bookId) => new Promise((resolve, reject) => {
-    getConnection((err, db) => {
-        if (err) {
-            return reject(err);
-        }
+    const cartId = cartResult.rows[0].id;
 
-        const getCartIdQuery = "SELECT id FROM cart WHERE members_id = ?";
-        db.query(getCartIdQuery, [memberId], function (err, cartResult) {
-            if (err) {
-                reject(err);
-                return;
-            }
+    const bookResult = await pool.query(
+        "SELECT * FROM items WHERE cart_id = $1 AND books_id = $2",
+        [cartId, bookId]
+    );
 
-            if (cartResult.length > 0) {
-                const cartId = cartResult[0].id;
+    if (bookResult.rows.length === 0) {
+        return { message: "Book not found in cart." };
+    }
 
-                const getBookInCartQuery = `
-                    SELECT *
-                    FROM items
-                    WHERE cart_id = ? AND books_id = ?
-                `;
-                db.query(getBookInCartQuery, [cartId, bookId], function (err, bookResult) {
-                    if (err) {
-                        reject(err);
-                        return;
-                    }
+    const amount = bookResult.rows[0].amount;
 
-                    if (bookResult.length > 0) {
-                        const amount = bookResult[0].amount;
+    if (amount > 1) {
+        await pool.query(
+            "UPDATE items SET amount = amount - 1 WHERE cart_id = $1 AND books_id = $2",
+            [cartId, bookId]
+        );
+        return { message: "Decreased item quantity by 1." };
+    } else {
+        await pool.query(
+            "DELETE FROM items WHERE cart_id = $1 AND books_id = $2",
+            [cartId, bookId]
+        );
+        return { message: "Book removed from cart." };
+    }
+};
 
-                        if (amount > 1) {
-                            const decreaseItemQuery = `
-                                UPDATE items
-                                SET amount = amount - 1
-                                WHERE cart_id = ? AND books_id = ?
-                            `;
-                            db.query(decreaseItemQuery, [cartId, bookId], function (err, updateResult) {
-                                if (err) {
-                                    reject(err);
-                                    return;
-                                }
-
-                                resolve({ message: "Decreased item quantity by 1." });
-                            });
-                        } else {
-                            const deleteItemQuery = `
-                                DELETE FROM items
-                                WHERE cart_id = ? AND books_id = ?
-                            `;
-                            db.query(deleteItemQuery, [cartId, bookId], function (err, deleteResult) {
-                                if (err) {
-                                    reject(err);
-                                    return;
-                                }
-
-                                resolve({ message: "Book removed from cart." });
-                            });
-                        }
-                    } else {
-                        resolve({ message: "Book not found in cart." });
-                    }
-                });
-            } else {
-                resolve({ message: "Cart not found." });
-            }
-            releaseConnection(db); // Release the connection at the end of the entire logic
-        });
-    });
-});
-
-//inserting the item into a member´s new cart or and updating the item´s amount if the cart already exists
-function insertOrUpdateItem(db, cartId, bookId, resolve, reject) {
-    const checkBookQuery = "SELECT * FROM items WHERE cart_id = ? AND books_id = ?";
-    db.query(checkBookQuery, [cartId, bookId], function (err, result) {
-        if (err) {
-            reject(err);
-            return;
-        }
-
-        if (result.length > 0) {
-            const updateAmountQuery = "UPDATE items SET amount = amount + 1 WHERE cart_id = ? AND books_id = ?";
-            db.query(updateAmountQuery, [cartId, bookId], function (err) {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve();
-                }
-            });
-        } else {
-            const addItemQuery = "INSERT INTO items (cart_id, books_id, amount, isBought) VALUES (?, ?, 1, 0)";
-            db.query(addItemQuery, [cartId, bookId], function (err) {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve();
-                }
-            });
-        }
-    });
+// Deleting a member's cart
+async function clearCartForMember(memberId) {
+    await pool.query('DELETE FROM cart WHERE members_id = $1', [memberId]);
 }
 
-
-//deleting a member´s cart
-function clearCartForMember(memberId) {
-    return new Promise((resolve, reject) => {
-        getConnection((err, db) => {
-            if (err) {
-                return reject(err);
-            }
-
-            const clearCartQuery = 'DELETE FROM cart WHERE members_id = ?';
-            db.query(clearCartQuery, [memberId], function (err, result) {
-                releaseConnection(db); // Release the connection
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve();
-                }
-            });
-        });
-    });
+// Items get marked as Bought within the database if the member clicks on "Buy"
+async function markAllItemsAsBought(cartId) {
+    await pool.query('UPDATE items SET "isBought" = true WHERE cart_id = $1', [cartId]);
 }
-
-//items get marked as Bought within the database if the member clicks un "Buy"
-function markAllItemsAsBought(cartId) {
-    return new Promise((resolve, reject) => {
-        getConnection((err, db) => {
-            if (err) {
-                return reject(err);
-            }
-
-            const query = 'UPDATE items SET isBought = 1 WHERE cart_id = ?';
-            db.query(query, [cartId], function (err, result) {
-                releaseConnection(db); // Release the connection
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve();
-                }
-            });
-        });
-    });
-}
-
-
 
 module.exports = {
     addToCart,
@@ -230,5 +116,4 @@ module.exports = {
     markAllItemsAsBought,
     clearCartForMember,
     removeItemFromCart,
-}
-
+};
