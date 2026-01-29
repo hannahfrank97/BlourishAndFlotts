@@ -2,7 +2,7 @@
 
     <div class="navbar-container">
         <div class="logo-container">
-            <a href="/blourish-and-flotts" class="logo-link">
+            <a href="/" class="logo-link">
             <img src="/images/logo.png" alt="Logo" class="logo">
             </a>
         </div>

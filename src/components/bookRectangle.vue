@@ -26,7 +26,7 @@ export default {
     },
     methods: {
         getImageSource(imageName) {
-            return '/blourish-and-flotts/images/' + imageName;
+            return import.meta.env.BASE_URL + 'images/' + imageName;
         },
     },
 };

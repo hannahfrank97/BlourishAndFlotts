@@ -14,9 +14,9 @@ export default {
     methods: {
         getImageSource(imageName) {
             if(imageName && imageName.trim() !== '') {
-                return '/blourish-and-flotts/images/' + imageName;
+                return import.meta.env.BASE_URL + 'images/' + imageName;
             } else {
-                return '/blourish-and-flotts/images/logo.png';
+                return import.meta.env.BASE_URL + 'images/logo.png';
             }
         },
 
