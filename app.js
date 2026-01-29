@@ -81,8 +81,8 @@ app.use('/api/shop', require('./routes/books'));
 app.use('/api/cart', require('./routes/cart'));
 
 
-// routes
-app.get('/', (req, res) => {
+// Serve Vue app for all non-API routes (SPA fallback)
+app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
