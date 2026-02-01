@@ -32,6 +32,7 @@ const allowedOrigins = [
     'https://hannahfrank.at/blourish-and-flotts',
     'https://www.hannahfrank.at',
     'https://hannahfrank.at',
+    'https://blourish.hannahfrank.at',
     /\.onrender\.com$/  // Allow all Render domains
   ];
 
